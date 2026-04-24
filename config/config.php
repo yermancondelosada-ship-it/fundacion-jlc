@@ -4,14 +4,20 @@
  * Optimizado para Hostinger
  */
 
-// Definición de la URL base (Ajustar al dominio real en Hostinger)
-define('BASE_URL', 'https://tu-dominio.com/'); 
-
-// Configuración de la Base de Datos (Completar con datos de hPanel)
-define('DB_HOST', 'localhost'); // Generalmente localhost en Hostinger
-define('DB_NAME', 'u123456789_nombre_bd'); 
-define('DB_USER', 'u123456789_usuario_bd'); 
-define('DB_PASS', 'tu_password_seguro');
+// Detección automática de entorno
+if ($_SERVER['HTTP_HOST'] == 'fjlc.site' || $_SERVER['HTTP_HOST'] == 'www.fjlc.site') {
+    // ENTORNO: PRODUCCIÓN (Hostinger)
+    if (file_exists(__DIR__ . '/db_deploy.php')) {
+        require_once __DIR__ . '/db_deploy.php';
+    }
+} else {
+    // ENTORNO: LOCAL (Desarrollo)
+    define('DB_HOST', 'localhost');
+    define('DB_NAME', 'u123456789_nombre_bd'); 
+    define('DB_USER', 'u123456789_usuario_bd'); 
+    define('DB_PASS', 'tu_password_seguro');
+    define('BASE_URL', 'http://localhost/Tutorial PHP/'); 
+}
 
 // Información de la Institución
 define('SITE_NAME', 'Fundación José Lisper Conde');
