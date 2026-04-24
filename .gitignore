@@ -1,0 +1,22 @@
+# Base de datos y configuración sensible
+config/db.php
+config/config.php
+
+# Archivos de subida (mantener la carpeta pero ignorar contenido)
+uploads/*
+!uploads/.gitkeep
+
+# Archivos temporales y de sistema
+Thumbs.db
+.DS_Store
+*.log
+*.tmp
+
+# IDEs y Editores
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
