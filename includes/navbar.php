@@ -13,10 +13,10 @@
             <li class="dropdown">
                 <a href="#" class="dropbtn">Pilares Estratégicos <i class="fas fa-chevron-down"></i></a>
                 <div class="dropdown-content">
-                    <a href="pilar-tecnologia.php"><i class="fas fa-laptop-code"></i> Tecnología e Innovación</a>
-                    <a href="pilar-educacion.php"><i class="fas fa-user-graduate"></i> Educación Multinivel</a>
-                    <a href="pilar-turismo.php"><i class="fas fa-leaf"></i> Turismo Sostenible</a>
-                    <a href="pilar-gestion.php"><i class="fas fa-hand-holding-heart"></i> Gestión Socio-Ambiental</a>
+                    <a href="pilares.php"><i class="fas fa-laptop-code"></i> Tecnología e Innovación</a>
+                    <a href="pilares.php"><i class="fas fa-user-graduate"></i> Educación Multinivel</a>
+                    <a href="pilares.php"><i class="fas fa-leaf"></i> Turismo Sostenible</a>
+                    <a href="pilares.php"><i class="fas fa-hand-holding-heart"></i> Gestión Socio-Ambiental</a>
                 </div>
             </li>
             <li><a href="nuestra-fundacion.php">Nosotros</a></li>

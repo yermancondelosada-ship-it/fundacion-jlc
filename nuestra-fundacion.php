@@ -1,8 +1,12 @@
 <?php 
 include_once 'includes/header.php'; 
 
-// Cargar equipo
-$equipo = $db->query("SELECT * FROM equipo ORDER BY orden ASC")->fetchAll();
+// Cargar equipo de forma segura
+try {
+    $equipo = $db->query("SELECT * FROM equipo ORDER BY orden ASC")->fetchAll();
+} catch (Exception $e) {
+    $equipo = []; // Si la tabla no existe en producción, evitamos el error crítico
+}
 ?>
 
 <!-- Hero Section -->
