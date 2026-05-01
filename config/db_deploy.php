@@ -14,7 +14,7 @@ define('DB_NAME', 'u800252909_u123456_fundac');
 define('DB_USER', 'u800252909_German'); 
 
 // Contraseña de la base de datos
-define('DB_PASS', 'TU_PASSWORD_AQUI');
+define('DB_PASS', 'German_2025');
 
 // URL Base en vivo
 define('BASE_URL', 'https://fjlc.site/'); 
