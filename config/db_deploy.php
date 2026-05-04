@@ -8,13 +8,13 @@
 define('DB_HOST', 'localhost'); 
 
 // Nombre de la base de datos
-define('DB_NAME', 'u800252909_u123456_fundac'); 
+define('DB_NAME', 'u800252909_fundacion'); 
 
 // Usuario de la base de datos
-define('DB_USER', 'u800252909_German'); 
+define('DB_USER', 'u800252909_german'); 
 
 // Contraseña de la base de datos
-define('DB_PASS', 'German_2025');
+define('DB_PASS', 'Fundacion2026*');
 
 // URL Base en vivo
 define('BASE_URL', 'https://fjlc.site/'); 

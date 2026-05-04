@@ -1,6 +1,7 @@
 # Base de datos y configuración sensible
 config/db.php
 config/config.php
+config/db_deploy.php
 
 # Archivos de subida (mantener la carpeta pero ignorar contenido)
 uploads/*
