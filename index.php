@@ -10,23 +10,62 @@ require_once 'config/config.php';
     <title>Fundación José Lisper Conde | Innovación y Sostenibilidad</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
     <?php include 'includes/navbar.php'; ?>
 
-    <header class="hero-section">
-        <div class="hero-content">
-            <h1>Transformando el Mañana a través de la Educación</h1>
-            <p>Impulsamos el desarrollo integral mediante tecnología, sostenibilidad y gestión social.</p>
-            <div class="hero-btns">
-                <a href="capacitate.php" class="btn-primary">Explorar Cursos</a>
-                <a href="#pilares" class="btn-secondary">Nuestros Pilares</a>
+    <div class="hero-wrapper">
+        <!-- Slider main container -->
+        <div class="swiper-container swiper" id="heroSwiper">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+                <!-- Slide 1 -->
+                <div class="swiper-slide">
+                    <img src="uploads/img/banner1.jpg" alt="Educación" onerror="this.src='https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=500&q=80'">
+                    <div class="carousel-caption">
+                        <h1>Transformando el Mañana a través de la Educación</h1>
+                        <p>Impulsamos el desarrollo integral mediante tecnología, sostenibilidad y gestión social.</p>
+                        <div class="hero-btns">
+                            <a href="capacitate.php" class="btn-primary">Explorar Cursos</a>
+                            <a href="#pilares" class="btn-secondary">Nuestros Pilares</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="swiper-slide">
+                    <img src="uploads/img/banner2.jpg" alt="Sostenibilidad" onerror="this.src='https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=500&q=80'">
+                    <div class="carousel-caption">
+                        <h1>Turismo Sostenible y Gestión Ambiental</h1>
+                        <p>Promovemos la conservación de nuestro entorno para las futuras generaciones.</p>
+                        <div class="hero-btns">
+                            <a href="nuestra-fundacion.php" class="btn-primary">Conócenos</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="swiper-slide">
+                    <img src="uploads/img/banner3.jpg" alt="Tecnología" onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=500&q=80'">
+                    <div class="carousel-caption">
+                        <h1>Innovación para el Desarrollo</h1>
+                        <p>Llevamos herramientas tecnológicas a quienes más lo necesitan.</p>
+                        <div class="hero-btns">
+                            <a href="servicios-corporativos.php" class="btn-primary">Nuestros Servicios</a>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!-- If we need pagination -->
+            <div class="swiper-pagination"></div>
+            <!-- If we need navigation buttons -->
+            <div class="swiper-button-prev" style="color: white;"></div>
+            <div class="swiper-button-next" style="color: white;"></div>
         </div>
-    </header>
+    </div>
 
     <section id="pilares" class="pillars-grid">
         <div class="section-title">
@@ -34,7 +73,7 @@ require_once 'config/config.php';
             <div class="underline"></div>
         </div>
 
-        <div class="container">
+        <div class="pillars-container">
             <div class="pillar-card">
                 <i class="fas fa-microchip"></i>
                 <h3>Tecnología e Innovación</h3>
@@ -58,133 +97,29 @@ require_once 'config/config.php';
         </div>
     </section>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        body {
-            background-color: #fcfcfc;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .hero-section {
-            height: 80vh;
-            background: linear-gradient(rgba(0, 74, 153, 0.7), rgba(0, 74, 153, 0.7)),
-                url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .hero-content p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-btns {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        .btn-primary,
-        .btn-secondary {
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .btn-primary {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 2px solid white;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .pillars-grid {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: #004a99;
-        }
-
-        .underline {
-            width: 80px;
-            height: 4px;
-            background: #28a745;
-            margin: 10px auto;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .pillar-card {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            transition: 0.3s;
-            border-bottom: 5px solid transparent;
-        }
-
-        .pillar-card:hover {
-            transform: translateY(-10px);
-            border-bottom: 5px solid #28a745;
-        }
-
-        .pillar-card i {
-            font-size: 3rem;
-            color: #004a99;
-            margin-bottom: 1.5rem;
-        }
-
-        .pillar-card h3 {
-            margin-bottom: 1rem;
-            color: #333;
-        }
-    </style>
+    <!-- Swiper JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Carousel Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const swiper = new Swiper('#heroSwiper', {
+                direction: 'horizontal',
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+        });
+    </script>
 
     <!-- Firebase SDK (Version 9+) -->
     <script type="module" src="js/auth-handler.js"></script>
