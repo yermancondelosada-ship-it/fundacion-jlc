@@ -12,7 +12,7 @@ if (!$isLocal) {
     // ENTORNO: PRODUCCIÓN (Hostinger)
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'u800252909_fjlc_db');
-    define('DB_USER', 'u800252909_admin_fjlc');
+    define('DB_USER', 'u800252909_german');
     define('DB_PASS', 'German_2025');
     define('BASE_URL', 'https://fundacionjlc.org/');
 } else {
