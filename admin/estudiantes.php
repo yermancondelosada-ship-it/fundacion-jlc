@@ -1,6 +1,6 @@
 <?php 
 $page_title = "Gestión de Estudiantes";
-include_once 'includes/admin_header.php'; 
+include_once __DIR__ . '/includes/admin_header.php'; 
 
 // Handle Deletion
 if (isset($_GET['delete_id'])) {
@@ -84,4 +84,4 @@ $students = $db->query("SELECT * FROM users WHERE rol = 'estudiante' ORDER BY fe
     </div>
 </div>
 
-<?php include_once 'includes/admin_footer.php'; ?>
+<?php include_once __DIR__ . '/includes/admin_footer.php'; ?>

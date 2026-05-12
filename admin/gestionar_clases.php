@@ -14,7 +14,7 @@ $curso = $stmt->fetch();
 if (!$curso) { header("Location: cursos.php"); exit; }
 
 $page_title = "Estructura Académica: " . $curso->titulo;
-include_once 'includes/admin_header.php'; 
+include_once __DIR__ . '/includes/admin_header.php'; 
 
 $message = "";
 
@@ -228,5 +228,5 @@ foreach ($modulos as &$mod) {
 <?php 
 $out = ob_get_clean();
 echo $out;
-include_once 'includes/admin_footer.php'; 
+include_once __DIR__ . '/includes/admin_footer.php'; 
 ?>

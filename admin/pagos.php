@@ -34,7 +34,7 @@ $pagos = $db->query("
 ")->fetchAll();
 
 // 2. INCLUDE HEADER (AFTER LOGIC)
-include_once 'includes/admin_header.php'; 
+include_once __DIR__ . '/includes/admin_header.php'; 
 ?>
 
 <?php if(isset($_GET['success'])): ?>
@@ -113,5 +113,5 @@ include_once 'includes/admin_header.php';
 <?php 
 $out = ob_get_clean();
 echo $out;
-include_once 'includes/admin_footer.php'; 
+include_once __DIR__ . '/includes/admin_footer.php'; 
 ?>

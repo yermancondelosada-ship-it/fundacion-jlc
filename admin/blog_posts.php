@@ -61,7 +61,7 @@ if (isset($_GET['success'])) {
 // Fetch Posts
 $posts = $db->query("SELECT * FROM blog_posts ORDER BY fecha_publicacion DESC")->fetchAll();
 
-include_once 'includes/admin_header.php'; 
+include_once __DIR__ . '/includes/admin_header.php'; 
 ?>
 
 <?php if($message): ?>
@@ -204,5 +204,5 @@ include_once 'includes/admin_header.php';
 <?php 
 $out = ob_get_clean();
 echo $out;
-include_once 'includes/admin_footer.php'; 
+include_once __DIR__ . '/includes/admin_footer.php'; 
 ?>

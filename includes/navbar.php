@@ -21,13 +21,31 @@
 
         <!-- Enlaces de navegación -->
         <ul class="nav-links">
-            <li><a href="index.php">INICIO</a></li>
-            <li><a href="nuestra-fundacion.php">NUESTRA FUNDACIÓN</a></li>
-            <li><a href="servicios-corporativos.php">SERVICIOS CORPORATIVOS</a></li>
-            <li><a href="pilares.php">PILARES</a></li>
-            <li><a href="propuesta-de-valor.php">PROPUESTA DE VALOR</a></li>
-            <li><a href="blog.php">BLOG</a></li>
-            <li><a href="contacto.php">CONTACTO</a></li>
+            <?php
+            $default_links = [
+                ['url' => 'index.php', 'text' => 'INICIO'],
+                ['url' => 'nuestra-fundacion.php', 'text' => 'NUESTRA FUNDACIÓN'],
+                ['url' => 'servicios-corporativos.php', 'text' => 'SERVICIOS CORPORATIVOS'],
+                ['url' => 'pilares.php', 'text' => 'PILARES'],
+                ['url' => 'propuesta-de-valor.php', 'text' => 'PROPUESTA DE VALOR'],
+                ['url' => 'blog.php', 'text' => 'BLOG'],
+                ['url' => 'contacto.php', 'text' => 'CONTACTO']
+            ];
+            $nav_links = $default_links;
+            if (function_exists('getSiteConfig')) {
+                $saved_links = getSiteConfig('navbar_links');
+                if (!empty($saved_links)) {
+                    $decoded = json_decode($saved_links, true);
+                    if (is_array($decoded) && count($decoded) > 0) {
+                        $nav_links = $decoded;
+                    }
+                }
+            }
+            
+            foreach ($nav_links as $link) {
+                echo '<li><a href="' . htmlspecialchars($link['url']) . '">' . htmlspecialchars(strtoupper($link['text'])) . '</a></li>';
+            }
+            ?>
         </ul>
     </div>
 </nav>

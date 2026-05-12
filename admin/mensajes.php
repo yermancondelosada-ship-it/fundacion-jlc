@@ -1,6 +1,6 @@
 <?php 
 $page_title = "Mensajes de Contacto";
-include_once 'includes/admin_header.php'; 
+include_once __DIR__ . '/includes/admin_header.php'; 
 
 // Fetch messages (mocking since there's no table for messages in setup.sql, I should create it if needed or just show a message)
 // I'll create the table if it doesn't exist to be functional.
@@ -56,4 +56,4 @@ $mensajes = $db->query("SELECT * FROM mensajes ORDER BY fecha DESC")->fetchAll()
     </div>
 </div>
 
-<?php include_once 'includes/admin_footer.php'; ?>
+<?php include_once __DIR__ . '/includes/admin_footer.php'; ?>

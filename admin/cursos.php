@@ -1,6 +1,6 @@
 <?php 
 $page_title = "Gestión de Cursos";
-include_once 'includes/admin_header.php'; 
+include_once __DIR__ . '/includes/admin_header.php'; 
 
 $message = "";
 
@@ -177,4 +177,4 @@ $cursos = $db->query("SELECT * FROM cursos ORDER BY id DESC")->fetchAll();
     }
 </script>
 
-<?php include_once 'includes/admin_footer.php'; ?>
+<?php include_once __DIR__ . '/includes/admin_footer.php'; ?>

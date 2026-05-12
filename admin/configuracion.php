@@ -132,6 +132,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
+    // 7. Navbar Links Management
+    if (isset($_POST['update_navbar_links'])) {
+        $links_text = $_POST['navbar_text'] ?? [];
+        $links_url = $_POST['navbar_url'] ?? [];
+        $nav_array = [];
+        for ($i = 0; $i < count($links_text); $i++) {
+            if (!empty(trim($links_text[$i])) && !empty(trim($links_url[$i]))) {
+                $nav_array[] = ['text' => trim($links_text[$i]), 'url' => trim($links_url[$i])];
+            }
+        }
+        $json_links = json_encode($nav_array, JSON_UNESCAPED_UNICODE);
+        $stmt = $db->prepare("INSERT INTO site_config (llave, valor, categoria) VALUES ('navbar_links', ?, 'apariencia') ON DUPLICATE KEY UPDATE valor = ?");
+        $stmt->execute([$json_links, $json_links]);
+        header("Location: configuracion.php?success=1#navegacion");
+        exit;
+    }
+
     header("Location: configuracion.php?success=1");
     exit;
 }
@@ -163,13 +180,24 @@ $servicios = $db->query("SELECT * FROM servicios ORDER BY orden ASC")->fetchAll(
 $propuestas = $db->query("SELECT * FROM propuestas_valor ORDER BY orden ASC")->fetchAll();
 $equipo = $db->query("SELECT * FROM equipo ORDER BY orden ASC")->fetchAll();
 
+$navbar_links_json = $db->query("SELECT valor FROM site_config WHERE llave = 'navbar_links'")->fetchColumn();
+$navbar_links = $navbar_links_json ? json_decode($navbar_links_json, true) : [
+    ['url' => 'index.php', 'text' => 'INICIO'],
+    ['url' => 'nuestra-fundacion.php', 'text' => 'NUESTRA FUNDACIÓN'],
+    ['url' => 'servicios-corporativos.php', 'text' => 'SERVICIOS CORPORATIVOS'],
+    ['url' => 'pilares.php', 'text' => 'PILARES'],
+    ['url' => 'propuesta-de-valor.php', 'text' => 'PROPUESTA DE VALOR'],
+    ['url' => 'blog.php', 'text' => 'BLOG'],
+    ['url' => 'contacto.php', 'text' => 'CONTACTO']
+];
+
 function getConfig($key, $default = '') {
     global $configs;
     return $configs[$key] ?? $default;
 }
 
 // 2. NOW WE CAN INCLUDE THE HEADER (WHICH OUTPUTS HTML)
-include_once 'includes/admin_header.php'; 
+include_once __DIR__ . '/includes/admin_header.php'; 
 ?>
 
 <!-- Quill.js for Rich Text -->
@@ -273,6 +301,15 @@ include_once 'includes/admin_header.php';
                 </div>
                 <h4 class="text-xl font-bold text-gray-900 mb-2">Programador</h4>
                 <p class="text-gray-500 text-sm">Automatiza el cambio de estilo visual.</p>
+            </div>
+
+            <!-- 9. Navegación -->
+            <div onclick="showModule('navegacion')" class="module-card bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-100 flex flex-col items-center text-center">
+                <div class="w-16 h-16 icon-box rounded-2xl flex items-center justify-center text-2xl mb-6">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <h4 class="text-xl font-bold text-gray-900 mb-2">Navegación</h4>
+                <p class="text-gray-500 text-sm">Edita los enlaces del menú principal.</p>
             </div>
         </div>
     </div>
@@ -657,7 +694,81 @@ include_once 'includes/admin_header.php';
         </section>
     </div>
 
+    <!-- MODULE: NAVEGACION -->
+    <div id="module-navegacion" class="view-module">
+        <button onclick="showDashboard()" class="mb-8 text-brand-700 font-bold flex items-center hover:translate-x-[-5px] transition-transform">
+            <i class="fas fa-arrow-left mr-2"></i> Volver al Panel
+        </button>
+        <section class="bg-white rounded-[2.5rem] shadow-xl p-10">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h4 class="text-2xl font-bold">Barra de Navegación</h4>
+                    <p class="text-gray-500 text-sm mt-1">Configura los enlaces del menú principal del sitio web.</p>
+                </div>
+                <button type="button" onclick="addNavRow()" class="bg-brand-100 text-brand-700 hover:bg-brand-200 px-6 py-2 rounded-xl font-bold transition-all text-sm flex items-center">
+                    <i class="fas fa-plus mr-2"></i> AÑADIR ENLACE
+                </button>
+            </div>
+            
+            <form action="configuracion.php" method="POST" class="space-y-6">
+                <input type="hidden" name="update_navbar_links" value="1">
+                
+                <div class="bg-gray-50 rounded-3xl p-6 border border-gray-100">
+                    <div class="grid grid-cols-12 gap-4 mb-4 text-xs font-bold text-gray-500 uppercase tracking-widest px-4">
+                        <div class="col-span-5">Texto a Mostrar</div>
+                        <div class="col-span-6">URL / Enlace</div>
+                        <div class="col-span-1 text-center">Acción</div>
+                    </div>
+                    
+                    <div id="nav-links-container" class="space-y-3">
+                        <?php foreach($navbar_links as $index => $link): ?>
+                        <div class="nav-link-row grid grid-cols-12 gap-4 items-center bg-white p-3 rounded-2xl shadow-sm border border-gray-100">
+                            <div class="col-span-5">
+                                <input type="text" name="navbar_text[]" value="<?php echo htmlspecialchars($link['text']); ?>" required class="w-full px-4 py-3 bg-gray-50 rounded-xl border-none font-bold text-sm" placeholder="Ej: INICIO">
+                            </div>
+                            <div class="col-span-6">
+                                <input type="text" name="navbar_url[]" value="<?php echo htmlspecialchars($link['url']); ?>" required class="w-full px-4 py-3 bg-gray-50 rounded-xl border-none text-sm" placeholder="Ej: index.php">
+                            </div>
+                            <div class="col-span-1 flex justify-center">
+                                <button type="button" onclick="this.closest('.nav-link-row').remove()" class="w-10 h-10 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-xl flex items-center justify-center transition-all">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                
+                <button type="submit" class="floating-save bg-brand-700 text-white px-10 py-5 rounded-3xl font-black text-lg shadow-2xl hover:bg-brand-800 transition-all">
+                    <i class="fas fa-save mr-2"></i> GUARDAR NAVEGACIÓN
+                </button>
+            </form>
+        </section>
+    </div>
+
 </div> <!-- End config-container -->
+
+<script>
+    function addNavRow() {
+        const container = document.getElementById('nav-links-container');
+        const row = document.createElement('div');
+        row.className = 'nav-link-row grid grid-cols-12 gap-4 items-center bg-white p-3 rounded-2xl shadow-sm border border-gray-100 mt-3';
+        row.innerHTML = `
+            <div class="col-span-5">
+                <input type="text" name="navbar_text[]" required class="w-full px-4 py-3 bg-gray-50 rounded-xl border-none font-bold text-sm" placeholder="Ej: NUEVA SECCIÓN">
+            </div>
+            <div class="col-span-6">
+                <input type="text" name="navbar_url[]" required class="w-full px-4 py-3 bg-gray-50 rounded-xl border-none text-sm" placeholder="Ej: nueva-seccion.php">
+            </div>
+            <div class="col-span-1 flex justify-center">
+                <button type="button" onclick="this.closest('.nav-link-row').remove()" class="w-10 h-10 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-xl flex items-center justify-center transition-all">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+        container.appendChild(row);
+    }
+</script>
 
 <!-- MODALS -->
 <!-- MODAL: PROPUESTA -->
@@ -927,5 +1038,5 @@ include_once 'includes/admin_header.php';
 <?php 
 $content = ob_get_clean();
 echo $content;
-include_once 'includes/admin_footer.php'; 
+include_once __DIR__ . '/includes/admin_footer.php'; 
 ?>

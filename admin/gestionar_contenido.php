@@ -3,7 +3,7 @@ ob_start();
 require_once '../config/config.php';
 require_once '../config/db.php';
 $page_title = "Editor Rápido de Contenido";
-include_once 'includes/admin_header.php';
+include_once __DIR__ . '/includes/admin_header.php';
 
 $db = Database::getInstance();
 $message = "";
@@ -114,5 +114,5 @@ $cursos = $db->query("SELECT id, titulo FROM cursos WHERE estado = 'activo'")->f
 <?php 
 $out = ob_get_clean();
 echo $out;
-include_once 'includes/admin_footer.php'; 
+include_once __DIR__ . '/includes/admin_footer.php'; 
 ?>

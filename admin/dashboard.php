@@ -3,7 +3,7 @@
  * Dashboard Administrativo - Plataforma JLC V2.0
  */
 $page_title = "Resumen del Sistema";
-include_once 'includes/admin_header.php';
+include_once __DIR__ . '/includes/admin_header.php';
 
 // Consultas para las tarjetas (Métricas reales)
 try {
@@ -171,4 +171,4 @@ try {
 
 </div>
 
-<?php include_once 'includes/admin_footer.php'; ?>
+<?php include_once __DIR__ . '/includes/admin_footer.php'; ?>
