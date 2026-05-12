@@ -4,10 +4,11 @@
  * Optimizado para Hostinger
  */
 
-// Detección automática de entorno
-$isProduction = (isset($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] == 'fundacionjlc.org' || $_SERVER['HTTP_HOST'] == 'www.fundacionjlc.org'));
+// Detección automática de entorno más robusta
+$host = $_SERVER['HTTP_HOST'] ?? '';
+$isLocal = in_array($host, ['localhost', '127.0.0.1', '::1']) || strpos($host, 'localhost') !== false;
 
-if ($isProduction) {
+if (!$isLocal) {
     // ENTORNO: PRODUCCIÓN (Hostinger)
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'u800252909_fjlc_db');
@@ -39,7 +40,7 @@ define('FIREBASE_APP_ID', 'TU_APP_ID');
 // Seguridad de Sesión
 ini_set('session.cookie_httponly', 1);
 ini_set('session.use_only_cookies', 1);
-if ($isProduction) {
+if (!$isLocal) {
     ini_set('session.cookie_secure', 1); // Activado solo para HTTPS en Hostinger
 }
 session_start();
