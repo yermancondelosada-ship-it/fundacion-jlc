@@ -1,5 +1,19 @@
 <?php
 require_once 'config/config.php';
+require_once 'config/db.php';
+
+$db = Database::getInstance();
+$site_configs = $db->query("SELECT llave, valor FROM site_config")->fetchAll(PDO::FETCH_KEY_PAIR);
+
+if (!function_exists('getSiteConfig')) {
+    function getSiteConfig($key, $default = '')
+    {
+        global $site_configs;
+        return $site_configs[$key] ?? $default;
+    }
+}
+
+$carrusel = $db->query("SELECT * FROM carrusel ORDER BY id ASC")->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -24,40 +38,32 @@ require_once 'config/config.php';
         <div class="swiper-container swiper" id="heroSwiper">
             <!-- Additional required wrapper -->
             <div class="swiper-wrapper">
-                <!-- Slide 1 -->
-                <div class="swiper-slide">
-                    <img src="uploads/img/banner1.jpg" alt="Educación" onerror="this.src='https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=500&q=80'">
-                    <div class="carousel-caption">
-                        <h1>Transformando el Mañana a través de la Educación</h1>
-                        <p>Impulsamos el desarrollo integral mediante tecnología, sostenibilidad y gestión social.</p>
-                        <div class="hero-btns">
-                            <a href="capacitate.php" class="btn-primary">Explorar Cursos</a>
-                            <a href="#pilares" class="btn-secondary">Nuestros Pilares</a>
+                <?php if (count($carrusel) > 0): ?>
+                    <?php foreach ($carrusel as $slide): ?>
+                        <div class="swiper-slide">
+                            <img src="uploads/img/<?php echo htmlspecialchars($slide->imagen); ?>"
+                                alt="<?php echo htmlspecialchars($slide->titulo); ?>">
+                            <div class="carousel-caption">
+                                <h1><?php echo htmlspecialchars($slide->titulo); ?></h1>
+                                <p><?php echo htmlspecialchars($slide->descripcion); ?></p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <!-- Slide por Defecto -->
+                    <div class="swiper-slide">
+                        <img src="uploads/img/banner1.jpg" alt="Educación"
+                            onerror="this.src='https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=500&q=80'">
+                        <div class="carousel-caption">
+                            <h1>Transformando el Mañana a través de la Educación</h1>
+                            <p>Impulsamos el desarrollo integral mediante tecnología, sostenibilidad y gestión social.</p>
+                            <div class="hero-btns">
+                                <a href="capacitate.php" class="btn-primary">Explorar Cursos</a>
+                                <a href="#pilares" class="btn-secondary">Nuestros Pilares</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Slide 2 -->
-                <div class="swiper-slide">
-                    <img src="uploads/img/banner2.jpg" alt="Sostenibilidad" onerror="this.src='https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=500&q=80'">
-                    <div class="carousel-caption">
-                        <h1>Turismo Sostenible y Gestión Ambiental</h1>
-                        <p>Promovemos la conservación de nuestro entorno para las futuras generaciones.</p>
-                        <div class="hero-btns">
-                            <a href="nuestra-fundacion.php" class="btn-primary">Conócenos</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Slide 3 -->
-                <div class="swiper-slide">
-                    <img src="uploads/img/banner3.jpg" alt="Tecnología" onerror="this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=500&q=80'">
-                    <div class="carousel-caption">
-                        <h1>Innovación para el Desarrollo</h1>
-                        <p>Llevamos herramientas tecnológicas a quienes más lo necesitan.</p>
-                        <div class="hero-btns">
-                            <a href="servicios-corporativos.php" class="btn-primary">Nuestros Servicios</a>
-                        </div>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
             <!-- If we need pagination -->
             <div class="swiper-pagination"></div>
@@ -74,26 +80,27 @@ require_once 'config/config.php';
         </div>
 
         <div class="pillars-container">
-            <div class="pillar-card">
-                <i class="fas fa-microchip"></i>
-                <h3>Tecnología e Innovación</h3>
-                <p>Digitalización y soluciones vanguardistas para el desarrollo comunitario.</p>
-            </div>
-            <div class="pillar-card">
-                <i class="fas fa-book-reader"></i>
-                <h3>Educación Multinivel</h3>
-                <p>Programas académicos desde lo básico hasta formación técnica avanzada.</p>
-            </div>
-            <div class="pillar-card">
-                <i class="fas fa-globe-americas"></i>
-                <h3>Turismo Sostenible</h3>
-                <p>Promoción de destinos respetando el equilibrio ecológico y cultural.</p>
-            </div>
-            <div class="pillar-card">
-                <i class="fas fa-seedling"></i>
-                <h3>Gestión Socio-Ambiental</h3>
-                <p>Proyectos de impacto real en la conservación y bienestar social.</p>
-            </div>
+            <?php
+            $default_icons = ['fas fa-microchip', 'fas fa-book-reader', 'fas fa-globe-americas', 'fas fa-seedling'];
+            $default_titles = ['Tecnología e Innovación', 'Educación Multinivel', 'Turismo Sostenible', 'Gestión Socio-Ambiental'];
+            $default_descs = [
+                'Digitalización y soluciones vanguardistas para el desarrollo comunitario.',
+                'Programas académicos desde lo básico hasta formación técnica avanzada.',
+                'Promoción de destinos respetando el equilibrio ecológico y cultural.',
+                'Proyectos de impacto real en la conservación y bienestar social.'
+            ];
+
+            for ($i = 1; $i <= 4; $i++):
+                $icono = getSiteConfig("pilar_{$i}_icono", $default_icons[$i - 1]);
+                $titulo = getSiteConfig("pilar_{$i}_titulo", $default_titles[$i - 1]);
+                $desc = getSiteConfig("pilar_{$i}_desc", $default_descs[$i - 1]);
+                ?>
+                <div class="pillar-card">
+                    <i class="<?php echo htmlspecialchars($icono); ?>"></i>
+                    <h3><?php echo htmlspecialchars($titulo); ?></h3>
+                    <p><?php echo htmlspecialchars($desc); ?></p>
+                </div>
+            <?php endfor; ?>
         </div>
     </section>
 
@@ -101,7 +108,7 @@ require_once 'config/config.php';
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <!-- Carousel Logic -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const swiper = new Swiper('#heroSwiper', {
                 direction: 'horizontal',
                 loop: true,

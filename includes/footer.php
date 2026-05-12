@@ -31,8 +31,7 @@
                                 class="fab fa-instagram text-white"></i></a>
                     <?php endif; ?>
                     <a href="https://wa.me/<?php echo getSiteConfig('social_wa') ?: '573006659062'; ?>" target="_blank"
-                        class="w-10">" target="_blank" class="w-10 h-10 bg-brand-800 rounded-full flex items-center
-                        justify-center hover:bg-brand-600 transition-colors"><i
+                        class="w-10 h-10 bg-brand-800 rounded-full flex items-center justify-center hover:bg-brand-600 transition-colors"><i
                             class="fab fa-whatsapp text-white"></i></a>
                 </div>
             </div>
@@ -102,7 +101,10 @@
     </a>
 
     <!-- WhatsApp Button -->
-    <?php $wa_link = getSiteConfig('social_wa', 'https://wa.me/3006659062'); ?>
+    <?php
+    $wa_number = getSiteConfig('social_wa', '573006659062');
+    $wa_link = "https://wa.me/" . $wa_number;
+    ?>
     <a href="<?php echo $wa_link; ?>" target="_blank" class="floating-btn btn-wa">
         <i class="fab fa-whatsapp"></i>
     </a>

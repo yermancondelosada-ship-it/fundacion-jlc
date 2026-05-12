@@ -1,11 +1,13 @@
 <?php 
 include_once 'includes/header.php'; 
 
-// Cargar equipo de forma segura
+// Cargar equipo y aliados de forma segura
 try {
-    $equipo = $db->query("SELECT * FROM equipo ORDER BY orden ASC")->fetchAll();
+    $equipo = $db->query("SELECT * FROM equipo ORDER BY orden ASC, id ASC")->fetchAll();
+    $aliados = $db->query("SELECT * FROM aliados ORDER BY orden ASC, id DESC")->fetchAll();
 } catch (Exception $e) {
-    $equipo = []; // Si la tabla no existe en producción, evitamos el error crítico
+    $equipo = [];
+    $aliados = [];
 }
 ?>
 
@@ -140,6 +142,20 @@ try {
                 <?php endif; ?>
             </div>
         </div>
+        <!-- Aliados Estratégicos -->
+        <?php if(!empty($aliados)): ?>
+        <div class="mt-32 mb-16">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-16">Nuestros Aliados</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-70 hover:opacity-100 transition-opacity duration-500">
+                <?php foreach($aliados as $aliado): ?>
+                    <div class="grayscale hover:grayscale-0 transition-all duration-300 transform hover:scale-110 p-4">
+                        <img src="uploads/img/<?php echo $aliado->logo; ?>" alt="<?php echo $aliado->nombre; ?>" class="max-h-20 w-auto object-contain">
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
     </div>
 </section>
 

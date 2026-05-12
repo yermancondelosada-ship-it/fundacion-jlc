@@ -5,18 +5,22 @@
  */
 
 // Detección automática de entorno
-if ($_SERVER['HTTP_HOST'] == 'fjlc.site' || $_SERVER['HTTP_HOST'] == 'www.fjlc.site') {
+$isProduction = (isset($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] == 'fundacionjlc.org' || $_SERVER['HTTP_HOST'] == 'www.fundacionjlc.org'));
+
+if ($isProduction) {
     // ENTORNO: PRODUCCIÓN (Hostinger)
-    if (file_exists(__DIR__ . '/db_deploy.php')) {
-        require_once __DIR__ . '/db_deploy.php';
-    }
+    define('DB_HOST', 'localhost');
+    define('DB_NAME', 'u800252909_fjlc_db');
+    define('DB_USER', 'u800252909_admin_fjlc');
+    define('DB_PASS', 'German_2025');
+    define('BASE_URL', 'https://fundacionjlc.org/');
 } else {
     // ENTORNO: LOCAL (Desarrollo)
     define('DB_HOST', 'localhost');
-    define('DB_NAME', 'u123456789_nombre_bd'); 
-    define('DB_USER', 'u123456789_usuario_bd'); 
-    define('DB_PASS', 'tu_password_seguro');
-    define('BASE_URL', 'http://localhost/Tutorial PHP/'); 
+    define('DB_NAME', 'u800252909_fjlc_db');
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
+    define('BASE_URL', 'http://localhost/Tutorial PHP/');
 }
 
 // Información de la Institución
@@ -35,5 +39,7 @@ define('FIREBASE_APP_ID', 'TU_APP_ID');
 // Seguridad de Sesión
 ini_set('session.cookie_httponly', 1);
 ini_set('session.use_only_cookies', 1);
-ini_set('session.cookie_secure', 1); // Activado para HTTPS en Hostinger
+if ($isProduction) {
+    ini_set('session.cookie_secure', 1); // Activado solo para HTTPS en Hostinger
+}
 session_start();

@@ -29,8 +29,8 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-gray-900 text-lg mb-1">Ubicación</h4>
-                            <p class="text-gray-600">Florencia, Caquetá, Colombia</p>
-                            <p class="text-gray-500 text-sm italic">Puerta de Oro de la Amazonía</p>
+                            <p class="text-gray-600"><?php echo getSiteConfig('contacto_direccion', 'Florencia, Caquetá, Colombia'); ?></p>
+                            <p class="text-gray-500 text-sm italic">Sede Principal</p>
                         </div>
                     </div>
 
@@ -40,8 +40,8 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-gray-900 text-lg mb-1">Teléfono</h4>
-                            <p class="text-gray-600"><?php echo CONTACT_PHONE; ?></p>
-                            <p class="text-gray-600">Atención Lunes a Viernes</p>
+                            <p class="text-gray-600"><?php echo getSiteConfig('contacto_telefono', '+57 (300) 123-4567'); ?></p>
+                            <p class="text-gray-600 text-sm">Atención Lunes a Viernes</p>
                         </div>
                     </div>
 
@@ -51,7 +51,7 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-gray-900 text-lg mb-1">Email</h4>
-                            <p class="text-gray-600"><?php echo CONTACT_EMAIL; ?></p>
+                            <p class="text-gray-600"><?php echo getSiteConfig('contacto_email', 'contacto@fundacionjlc.org'); ?></p>
                             <p class="text-gray-500 text-sm">Respondemos en menos de 24h</p>
                         </div>
                     </div>

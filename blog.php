@@ -2,8 +2,11 @@
 include_once 'includes/header.php'; 
 
 // Fetch blog posts from DB
-$db = Database::getInstance();
-$blog_posts = $db->query("SELECT * FROM blog_posts WHERE estado = 'publicado' ORDER BY fecha_publicacion DESC")->fetchAll();
+try {
+    $blog_posts = $db->query("SELECT * FROM blog_posts WHERE estado = 'publicado' ORDER BY fecha_publicacion DESC")->fetchAll();
+} catch (Exception $e) {
+    $blog_posts = [];
+}
 ?>
 
 <!-- Hero Section -->
@@ -75,7 +78,5 @@ $blog_posts = $db->query("SELECT * FROM blog_posts WHERE estado = 'publicado' OR
         </div>
     </div>
 </section>
-
-<?php include_once 'includes/footer.php'; ?>
 
 <?php include_once 'includes/footer.php'; ?>

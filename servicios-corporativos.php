@@ -2,7 +2,11 @@
 
 <?php 
 // Cargar servicios desde la base de datos
-$servicios_db = $db->query("SELECT * FROM servicios ORDER BY id ASC")->fetchAll();
+try {
+    $servicios_db = $db->query("SELECT * FROM servicios ORDER BY orden ASC, id DESC")->fetchAll();
+} catch (Exception $e) {
+    $servicios_db = [];
+}
 ?>
 
 <!-- Hero Section -->
@@ -26,9 +30,13 @@ $servicios_db = $db->query("SELECT * FROM servicios ORDER BY id ASC")->fetchAll(
             <?php else: ?>
                 <?php foreach($servicios_db as $srv): ?>
                 <div class="bg-white rounded-[3rem] p-12 shadow-2xl border border-gray-100 hover:scale-[1.02] transition-transform group flex flex-col h-full">
-                    <div class="w-20 h-20 bg-brand-100 text-brand-700 rounded-3xl flex items-center justify-center text-4xl mb-8 overflow-hidden p-4">
+                    <div class="w-20 h-20 bg-brand-100 text-brand-700 rounded-3xl flex items-center justify-center text-4xl mb-8 overflow-hidden p-4 shadow-inner">
                         <?php if($srv->icono): ?>
-                            <img src="uploads/img/<?php echo $srv->icono; ?>" class="w-full h-full object-contain">
+                            <?php if(strpos($srv->icono, 'fas fa-') !== false): ?>
+                                <i class="<?php echo htmlspecialchars($srv->icono); ?>"></i>
+                            <?php else: ?>
+                                <img src="uploads/img/<?php echo htmlspecialchars($srv->icono); ?>" class="w-full h-full object-contain">
+                            <?php endif; ?>
                         <?php else: ?>
                             <i class="fas fa-concierge-bell"></i>
                         <?php endif; ?>

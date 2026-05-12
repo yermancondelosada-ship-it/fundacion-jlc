@@ -10,7 +10,11 @@
 
 <?php 
 // Cargar propuestas desde la base de datos
-$propuestas_db = $db->query("SELECT * FROM propuestas_valor ORDER BY id ASC")->fetchAll();
+try {
+    $propuestas_db = $db->query("SELECT * FROM propuestas_valor ORDER BY id ASC")->fetchAll();
+} catch (Exception $e) {
+    $propuestas_db = [];
+}
 ?>
 
 <!-- Values List -->
@@ -27,10 +31,15 @@ $propuestas_db = $db->query("SELECT * FROM propuestas_valor ORDER BY id ASC")->f
             <div class="flex flex-col <?php echo ($index % 2 == 0) ? 'lg:flex-row' : 'lg:flex-row-reverse'; ?> items-center gap-16 mb-32">
                 <div class="lg:w-1/2">
                     <div class="relative">
-                        <?php if($prop->imagen): ?>
+                        <?php if(!empty($prop->imagen)): ?>
                             <img src="uploads/img/<?php echo $prop->imagen; ?>" class="rounded-[4rem] shadow-2xl relative z-10 w-full object-cover aspect-video" alt="Propuesta">
+                        <?php elseif(!empty($prop->icono) && strpos($prop->icono, 'fas fa-') !== false): ?>
+                            <div class="rounded-[4rem] shadow-2xl relative z-10 w-full aspect-video bg-gradient-to-br from-brand-700 to-brand-900 flex flex-col items-center justify-center text-white p-10">
+                                <i class="<?php echo $prop->icono; ?> text-9xl mb-6 opacity-80"></i>
+                                <h3 class="text-3xl font-bold text-center opacity-90"><?php echo $prop->titulo; ?></h3>
+                            </div>
                         <?php else: ?>
-                            <img src="https://images.unsplash.com/photo-1524178232363-1fb280714553?auto=format&fit=crop&w=800&q=80" class="rounded-[4rem] shadow-2xl relative z-10 w-full" alt="Propuesta">
+                            <img src="https://images.unsplash.com/photo-1524178232363-1fb280714553?auto=format&fit=crop&w=800&q=80" class="rounded-[4rem] shadow-2xl relative z-10 w-full object-cover aspect-video" alt="Propuesta">
                         <?php endif; ?>
                         <div class="absolute -top-8 -left-8 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl"></div>
                     </div>
