@@ -22,7 +22,7 @@ class Database
         } catch (PDOException $e) {
             // Log error y mostrar mensaje amigable
             error_log("Error de conexión: " . $e->getMessage());
-            die("Lo sentimos, hay un problema técnico de conexión. Intente más tarde.");
+            die("Error Técnico DB: " . $e->getMessage());
         }
     }
 
