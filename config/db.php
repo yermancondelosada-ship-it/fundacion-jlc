@@ -4,15 +4,17 @@
  * Diseñado para alta disponibilidad en Hostinger
  */
 
-class Database {
+class Database
+{
     private static $instance = null;
     private $conn;
 
-    private function __construct() {
+    private function __construct()
+    {
         try {
             $this->conn = new PDO(
-                "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4", 
-                DB_USER, 
+                "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
+                DB_USER,
                 DB_PASS
             );
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -24,14 +26,16 @@ class Database {
         }
     }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (!self::$instance) {
             self::$instance = new Database();
         }
         return self::$instance->getConnection();
     }
 
-    public function getConnection() {
+    public function getConnection()
+    {
         return $this->conn;
     }
 }
