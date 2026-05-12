@@ -80,7 +80,7 @@ function getSiteConfig($key, $default = '') {
                 <?php if(getSiteConfig('social_ig')): ?>
                     <a href="<?php echo getSiteConfig('social_ig'); ?>" target="_blank" class="hover:text-brand-700 transition-colors"><i class="fab fa-instagram"></i></a>
                 <?php endif; ?>
-                <a href="<?php echo getSiteConfig('social_wa', 'https://wa.me/'.WHATSAPP_NUMBER); ?>" target="_blank" class="hover:text-brand-700 transition-colors"><i class="fab fa-whatsapp"></i></a>
+                <a href="<?php echo getSiteConfig('social_wa', 'https://wa.me/573001234567'); ?>" target="_blank" class="hover:text-brand-700 transition-colors"><i class="fab fa-whatsapp"></i></a>
                 
                 <div class="h-4 w-px bg-gray-200 mx-2"></div>
                 <?php if(isset($_SESSION['user_id'])): ?>
