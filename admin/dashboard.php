@@ -11,8 +11,9 @@ try {
     $total_cursos = $db->query("SELECT COUNT(*) as total FROM cursos WHERE estado = 'activo'")->fetch()->total;
     $pendientes_pago = $db->query("SELECT COUNT(*) as total FROM inscripciones WHERE estado = 'pendiente'")->fetch()->total;
     $pagos_aprobados = $db->query("SELECT COUNT(*) as total FROM inscripciones WHERE estado = 'aprobado'")->fetch()->total;
+    $total_articulos = $db->query("SELECT COUNT(*) as total FROM blog_posts WHERE estado = 'publicado'")->fetch()->total;
 } catch (Exception $e) {
-    $total_estudiantes = 0; $total_cursos = 0; $pendientes_pago = 0; $pagos_aprobados = 0;
+    $total_estudiantes = 0; $total_cursos = 0; $pendientes_pago = 0; $pagos_aprobados = 0; $total_articulos = 0;
 }
 ?>
 
@@ -88,18 +89,6 @@ try {
         <h3 class="text-3xl font-bold text-gray-900">14</h3>
     </div>
 
-    <!-- 6. Impacto Ambiental -->
-    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl">
-                <i class="fas fa-tree"></i>
-            </div>
-            <span class="text-xs font-bold text-emerald-500">Meta 80%</span>
-        </div>
-        <p class="text-gray-500 text-sm font-medium">Árboles Plantados</p>
-        <h3 class="text-3xl font-bold text-gray-900">450</h3>
-    </div>
-
     <!-- 7. Visitas al Sitio -->
     <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
         <div class="flex items-center justify-between mb-4">
@@ -132,7 +121,7 @@ try {
             </div>
         </div>
         <p class="text-gray-500 text-sm font-medium">Artículos Publicados</p>
-        <h3 class="text-3xl font-bold text-gray-900">28</h3>
+        <h3 class="text-3xl font-bold text-gray-900"><?php echo $total_articulos; ?></h3>
     </div>
 
     <!-- 10. Satisfacción -->
@@ -158,16 +147,6 @@ try {
         <h3 class="text-3xl font-bold text-gray-900">150GB</h3>
     </div>
 
-    <!-- 12. Soporte Técnico -->
-    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
-        <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-xl">
-                <i class="fas fa-headset"></i>
-            </div>
-        </div>
-        <p class="text-gray-500 text-sm font-medium">Tickets Soporte</p>
-        <h3 class="text-3xl font-bold text-gray-900">0</h3>
-    </div>
 
 </div>
 
