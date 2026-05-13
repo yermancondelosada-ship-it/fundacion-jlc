@@ -6,7 +6,7 @@
 
 // Detección automática de entorno más robusta
 $host = $_SERVER['HTTP_HOST'] ?? '';
-$isLocal = in_array($host, ['localhost', '127.0.0.1', '::1']) || strpos($host, 'localhost') !== false;
+$isLocal = in_array($host, ['localhost', '127.0.0.1', '::1']) || strpos($host, 'localhost') !== false || php_sapi_name() === 'cli';
 
 if (!$isLocal) {
     // ENTORNO: PRODUCCIÓN (Hostinger)

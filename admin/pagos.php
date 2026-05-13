@@ -10,7 +10,7 @@ $message = "";
 // 1. DATABASE LOGIC & PROCESSING (MUST BE BEFORE ANY HTML)
 if (isset($_POST['action'])) {
     $inscripcion_id = $_POST['id'];
-    $nuevo_estado = ($_POST['action'] == 'aprobar') ? 'completado' : 'rechazado';
+    $nuevo_estado = ($_POST['action'] == 'aprobar') ? 'aprobado' : 'rechazado';
     $observaciones = $_POST['observaciones'] ?? '';
 
     try {

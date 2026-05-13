@@ -13,7 +13,7 @@ $user_id = $_SESSION['user_id'];
 $db = Database::getInstance();
 
 // 1. SECURITY CHECK
-$stmt = $db->prepare("SELECT estado FROM inscripciones WHERE user_id = ? AND curso_id = ? AND estado = 'completado'");
+$stmt = $db->prepare("SELECT estado FROM inscripciones WHERE user_id = ? AND curso_id = ? AND estado = 'aprobado'");
 $stmt->execute([$user_id, $curso_id]);
 if (!$stmt->fetch()) {
     header("Location: aula-virtual.php?error=acceso_denegado"); exit;

@@ -161,7 +161,7 @@ if (isset($_SESSION['user_id'])) {
                         <h3 class="text-2xl font-black text-gray-900 mb-4"><?php echo $curso->titulo; ?></h3>
                         <p class="text-gray-500 mb-8 line-clamp-3 text-sm flex-grow"><?php echo $curso->resumen; ?></p>
                         
-                        <?php if ($estado == 'completado'): ?>
+                        <?php if ($estado == 'aprobado'): ?>
                             <a href="ver-curso.php?id=<?php echo $curso->id; ?>" class="w-full bg-brand-700 text-white text-center py-5 rounded-2xl font-black shadow-xl hover:bg-brand-800 transition-all">ENTRAR AL CURSO</a>
                         <?php elseif ($estado == 'pendiente'): ?>
                             <button disabled class="w-full bg-yellow-400 text-brand-900 py-5 rounded-2xl font-black shadow-xl cursor-not-allowed flex items-center justify-center">
