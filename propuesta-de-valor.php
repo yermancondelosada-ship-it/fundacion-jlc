@@ -1,8 +1,12 @@
 <?php include_once 'includes/header.php'; ?>
 
+<?php 
+$hero_img = getSiteConfig('hero_propuesta');
+$hero_style = $hero_img ? "background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('uploads/img/{$hero_img}'); background-size: cover; background-position: center;" : "";
+?>
 <!-- Hero Section -->
-<section class="bg-brand-700 py-20 text-white">
-    <div class="container mx-auto px-4 text-center">
+<section class="bg-brand-700 py-24 text-white relative overflow-hidden" style="<?php echo $hero_style; ?>">
+    <div class="container mx-auto px-4 text-center relative z-10">
         <h1 class="text-5xl font-bold mb-4">Nuestra Propuesta de Valor</h1>
         <p class="text-xl opacity-90 max-w-2xl mx-auto">Lo que nos hace únicos y por qué somos el aliado ideal para tu crecimiento.</p>
     </div>

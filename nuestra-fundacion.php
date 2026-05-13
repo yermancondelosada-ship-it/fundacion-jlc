@@ -11,13 +11,16 @@ try {
 }
 ?>
 
+<?php 
+$hero_img = getSiteConfig('hero_nosotros');
+$hero_style = $hero_img ? "background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('uploads/img/{$hero_img}'); background-size: cover; background-position: center;" : "";
+?>
 <!-- Hero Section -->
-<section class="bg-brand-900 py-20 text-white relative overflow-hidden">
+<section class="bg-brand-900 py-24 text-white relative overflow-hidden" style="<?php echo $hero_style; ?>">
     <div class="container mx-auto px-4 relative z-10 text-center">
         <h1 class="text-5xl font-bold mb-4"><?php echo getSiteConfig('titulo_institucion', 'Nuestra Institución'); ?></h1>
-        <p class="text-xl text-green-200 max-w-2xl mx-auto"><?php echo getSiteConfig('subtitulo_institucion', 'Construyendo un legado de conocimiento y sostenibilidad en el corazón de la Amazonía colombiana.'); ?></p>
+        <p class="text-xl text-green-100 max-w-2xl mx-auto"><?php echo getSiteConfig('subtitulo_institucion', 'Construyendo un legado de conocimiento y sostenibilidad en el corazón de la Amazonía colombiana.'); ?></p>
     </div>
-    <div class="absolute top-0 right-0 w-64 h-64 bg-brand-700/20 rounded-full -mr-32 -mt-32 blur-3xl"></div>
 </section>
 
 <!-- Content Section -->

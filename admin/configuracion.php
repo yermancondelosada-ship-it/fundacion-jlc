@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $db->prepare("INSERT INTO site_config (llave, valor) VALUES (?, ?) ON DUPLICATE KEY UPDATE valor = ?");
             $stmt->execute([$key, $value, $value]);
         }
-        $globals = ['logo', 'favicon', 'hero_banner', 'historia_img'];
+        $globals = ['logo', 'favicon', 'hero_banner', 'historia_img', 'hero_nosotros', 'hero_servicios', 'hero_pilares', 'hero_propuesta', 'hero_blog', 'hero_contacto'];
         foreach ($globals as $file_key) {
             if (isset($_FILES[$file_key]) && $_FILES[$file_key]['error'] == 0) {
                 $ext = pathinfo($_FILES[$file_key]['name'], PATHINFO_EXTENSION);
@@ -571,6 +571,38 @@ include_once __DIR__ . '/includes/admin_header.php';
                             <input type="number" name="color_l" value="<?php echo getConfig('color_l', '29'); ?>"
                                 class="w-full px-6 py-4 rounded-2xl bg-gray-50 border-none font-bold">
                         </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10 pt-10 border-t">
+                    <h5 class="font-bold text-gray-900 mb-6">Imágenes de Cabecera (Hero)</h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <?php 
+                        $heroes = [
+                            'hero_nosotros' => 'Nuestra Fundación',
+                            'hero_servicios' => 'Servicios Corporativos',
+                            'hero_pilares' => 'Pilares',
+                            'hero_propuesta' => 'Propuesta de Valor',
+                            'hero_blog' => 'Blog Académico',
+                            'hero_contacto' => 'Contacto'
+                        ];
+                        foreach($heroes as $key => $label): 
+                            $img = getConfig($key);
+                        ?>
+                        <div>
+                            <label class="block text-sm font-bold mb-4 text-gray-600 uppercase"><?php echo $label; ?></label>
+                            <div class="bg-gray-50 p-6 rounded-[2rem] border-2 border-dashed border-gray-200 text-center mb-4">
+                                <?php if($img): ?>
+                                    <img id="preview-<?php echo $key; ?>" src="../uploads/img/<?php echo $img; ?>" class="w-full h-32 object-cover rounded-xl mb-4 shadow-sm">
+                                <?php else: ?>
+                                    <img id="preview-<?php echo $key; ?>" src="" class="w-full h-32 object-cover rounded-xl mb-4 shadow-sm hidden">
+                                    <div id="placeholder-<?php echo $key; ?>" class="w-full h-32 bg-gray-200 rounded-xl mb-4 flex items-center justify-center text-gray-400"><i class="fas fa-image text-3xl"></i></div>
+                                <?php endif; ?>
+                                <input type="file" name="<?php echo $key; ?>" onchange="if(this.files && this.files[0]){ var r = new FileReader(); r.onload = function(e){ document.getElementById('preview-<?php echo $key; ?>').src = e.target.result; document.getElementById('preview-<?php echo $key; ?>').classList.remove('hidden'); var p = document.getElementById('placeholder-<?php echo $key; ?>'); if(p) p.classList.add('hidden'); }; r.readAsDataURL(this.files[0]); }" class="hidden" id="<?php echo $key; ?>-input">
+                                <label for="<?php echo $key; ?>-input" class="cursor-pointer bg-white px-6 py-2 rounded-xl shadow-sm border border-gray-200 font-bold text-xs text-brand-700 hover:bg-brand-50 transition-all w-full block">SELECCIONAR IMAGEN</label>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </section>

@@ -9,9 +9,13 @@ try {
 }
 ?>
 
+<?php 
+$hero_img = getSiteConfig('hero_blog');
+$hero_style = $hero_img ? "background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('uploads/img/{$hero_img}'); background-size: cover; background-position: center;" : "";
+?>
 <!-- Hero Section -->
-<section class="bg-brand-900 py-20 text-white">
-    <div class="container mx-auto px-4 text-center">
+<section class="bg-brand-900 py-24 text-white relative overflow-hidden" style="<?php echo $hero_style; ?>">
+    <div class="container mx-auto px-4 text-center relative z-10">
         <h1 class="text-5xl font-bold mb-4"><?php echo getSiteConfig('blog_hero_titulo', 'Blog Académico'); ?></h1>
         <p class="text-xl text-green-200 max-w-2xl mx-auto"><?php echo getSiteConfig('blog_hero_subtitulo', 'Explora las últimas tendencias en educación, tecnología y sostenibilidad en la región.'); ?></p>
     </div>
