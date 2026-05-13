@@ -608,7 +608,7 @@ include_once __DIR__ . '/includes/admin_header.php';
         <!-- Hero Image Upload -->
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
             <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
-            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Nuestra Fundación".</p>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Nuestra Fundación". <br><span class="text-xs text-brand-700 font-bold"><i class="fas fa-info-circle"></i> Recomendación: Formato horizontal de alta calidad (ej. 1920x1080px) en JPG o PNG.</span></p>
             <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
                 <input type="hidden" name="update_general" value="1">
                 <?php $img_nosotros = getConfig('hero_nosotros'); ?>
@@ -816,7 +816,7 @@ include_once __DIR__ . '/includes/admin_header.php';
         <!-- Hero Image Upload -->
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
             <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
-            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Contacto".</p>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Contacto". <br><span class="text-xs text-brand-700 font-bold"><i class="fas fa-info-circle"></i> Recomendación: Formato horizontal de alta calidad (ej. 1920x1080px) en JPG o PNG.</span></p>
             <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
                 <input type="hidden" name="update_general" value="1">
                 <?php $img_contacto = getConfig('hero_contacto'); ?>
@@ -948,7 +948,7 @@ include_once __DIR__ . '/includes/admin_header.php';
         <!-- Hero Image Upload -->
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
             <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
-            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Propuesta de Valor".</p>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Propuesta de Valor". <br><span class="text-xs text-brand-700 font-bold"><i class="fas fa-info-circle"></i> Recomendación: Formato horizontal de alta calidad (ej. 1920x1080px) en JPG o PNG.</span></p>
             <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
                 <input type="hidden" name="update_general" value="1">
                 <?php $img_propuesta = getConfig('hero_propuesta'); ?>
@@ -1019,7 +1019,7 @@ include_once __DIR__ . '/includes/admin_header.php';
         <!-- Hero Image Upload -->
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
             <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
-            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Servicios Corporativos".</p>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Servicios Corporativos". <br><span class="text-xs text-brand-700 font-bold"><i class="fas fa-info-circle"></i> Recomendación: Formato horizontal de alta calidad (ej. 1920x1080px) en JPG o PNG.</span></p>
             <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
                 <input type="hidden" name="update_general" value="1">
                 <?php $img_servicios = getConfig('hero_servicios'); ?>
@@ -1075,7 +1075,7 @@ include_once __DIR__ . '/includes/admin_header.php';
         <!-- Hero Image Upload -->
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
             <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
-            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Pilares Estratégicos".</p>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Pilares Estratégicos". <br><span class="text-xs text-brand-700 font-bold"><i class="fas fa-info-circle"></i> Recomendación: Formato horizontal de alta calidad (ej. 1920x1080px) en JPG o PNG.</span></p>
             <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
                 <input type="hidden" name="update_general" value="1">
                 <?php $img_pilares = getConfig('hero_pilares'); ?>
@@ -1138,7 +1138,7 @@ include_once __DIR__ . '/includes/admin_header.php';
         <!-- Hero Image Upload -->
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
             <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
-            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Blog Académico".</p>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Blog Académico". <br><span class="text-xs text-brand-700 font-bold"><i class="fas fa-info-circle"></i> Recomendación: Formato horizontal de alta calidad (ej. 1920x1080px) en JPG o PNG.</span></p>
             <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
                 <input type="hidden" name="update_general" value="1">
                 <?php $img_blog = getConfig('hero_blog'); ?>
