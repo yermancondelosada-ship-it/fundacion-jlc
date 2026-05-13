@@ -456,6 +456,16 @@ include_once __DIR__ . '/includes/admin_header.php';
                 <p class="text-gray-500 text-sm">Links sociales, WhatsApp y ubicación.</p>
             </div>
 
+            <!-- 8. Blog Académico -->
+            <div onclick="showModule('blog')"
+                class="module-card bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-100 flex flex-col items-center text-center">
+                <div class="w-16 h-16 icon-box rounded-2xl flex items-center justify-center text-2xl mb-6">
+                    <i class="fas fa-blog"></i>
+                </div>
+                <h4 class="text-xl font-bold text-gray-900 mb-2">Blog Académico</h4>
+                <p class="text-gray-500 text-sm">Configura la cabecera de la sección de blog.</p>
+            </div>
+
             <!-- 8. Programador de Temas -->
             <div onclick="showModule('programador')"
                 class="module-card bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-100 flex flex-col items-center text-center">
@@ -573,38 +583,7 @@ include_once __DIR__ . '/includes/admin_header.php';
                         </div>
                     </div>
                 </div>
-                
-                <div class="mt-10 pt-10 border-t">
-                    <h5 class="font-bold text-gray-900 mb-6">Imágenes de Cabecera (Hero)</h5>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <?php 
-                        $heroes = [
-                            'hero_nosotros' => 'Nuestra Fundación',
-                            'hero_servicios' => 'Servicios Corporativos',
-                            'hero_pilares' => 'Pilares',
-                            'hero_propuesta' => 'Propuesta de Valor',
-                            'hero_blog' => 'Blog Académico',
-                            'hero_contacto' => 'Contacto'
-                        ];
-                        foreach($heroes as $key => $label): 
-                            $img = getConfig($key);
-                        ?>
-                        <div>
-                            <label class="block text-sm font-bold mb-4 text-gray-600 uppercase"><?php echo $label; ?></label>
-                            <div class="bg-gray-50 p-6 rounded-[2rem] border-2 border-dashed border-gray-200 text-center mb-4">
-                                <?php if($img): ?>
-                                    <img id="preview-<?php echo $key; ?>" src="../uploads/img/<?php echo $img; ?>" class="w-full h-32 object-cover rounded-xl mb-4 shadow-sm">
-                                <?php else: ?>
-                                    <img id="preview-<?php echo $key; ?>" src="" class="w-full h-32 object-cover rounded-xl mb-4 shadow-sm hidden">
-                                    <div id="placeholder-<?php echo $key; ?>" class="w-full h-32 bg-gray-200 rounded-xl mb-4 flex items-center justify-center text-gray-400"><i class="fas fa-image text-3xl"></i></div>
-                                <?php endif; ?>
-                                <input type="file" name="<?php echo $key; ?>" onchange="if(this.files && this.files[0]){ var r = new FileReader(); r.onload = function(e){ document.getElementById('preview-<?php echo $key; ?>').src = e.target.result; document.getElementById('preview-<?php echo $key; ?>').classList.remove('hidden'); var p = document.getElementById('placeholder-<?php echo $key; ?>'); if(p) p.classList.add('hidden'); }; r.readAsDataURL(this.files[0]); }" class="hidden" id="<?php echo $key; ?>-input">
-                                <label for="<?php echo $key; ?>-input" class="cursor-pointer bg-white px-6 py-2 rounded-xl shadow-sm border border-gray-200 font-bold text-xs text-brand-700 hover:bg-brand-50 transition-all w-full block">SELECCIONAR IMAGEN</label>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
+
             </section>
             <button type="submit"
                 class="floating-save bg-brand-700 text-white px-10 py-5 rounded-3xl font-black text-lg shadow-2xl hover:bg-brand-800 transition-all">
@@ -625,6 +604,31 @@ include_once __DIR__ . '/includes/admin_header.php';
                     class="px-4 py-2 bg-gray-100 rounded-xl text-xs font-bold text-gray-600 hover:bg-brand-50 hover:text-brand-700 transition-all">EQUIPO</a>
             </div>
         </div>
+
+        <!-- Hero Image Upload -->
+        <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
+            <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Nuestra Fundación".</p>
+            <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
+                <input type="hidden" name="update_general" value="1">
+                <?php $img_nosotros = getConfig('hero_nosotros'); ?>
+                <div class="w-full md:w-1/3 bg-gray-50 p-4 rounded-[2rem] border-2 border-dashed border-gray-200 text-center relative">
+                    <?php if($img_nosotros): ?>
+                        <img id="preview-hero_nosotros" src="../uploads/img/<?php echo $img_nosotros; ?>" class="w-full h-32 object-cover rounded-xl shadow-sm">
+                    <?php else: ?>
+                        <img id="preview-hero_nosotros" src="" class="w-full h-32 object-cover rounded-xl shadow-sm hidden">
+                        <div id="placeholder-hero_nosotros" class="w-full h-32 bg-gray-200 rounded-xl flex items-center justify-center text-gray-400"><i class="fas fa-image text-3xl"></i></div>
+                    <?php endif; ?>
+                </div>
+                <div class="w-full md:w-2/3 space-y-4">
+                    <input type="file" name="hero_nosotros" onchange="if(this.files && this.files[0]){ var r = new FileReader(); r.onload = function(e){ document.getElementById('preview-hero_nosotros').src = e.target.result; document.getElementById('preview-hero_nosotros').classList.remove('hidden'); var p = document.getElementById('placeholder-hero_nosotros'); if(p) p.classList.add('hidden'); }; r.readAsDataURL(this.files[0]); }" class="hidden" id="hero_nosotros-input">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <label for="hero_nosotros-input" class="cursor-pointer bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-200 font-bold text-sm text-brand-700 hover:bg-brand-50 transition-all flex-1 text-center"><i class="fas fa-upload mr-2"></i> SELECCIONAR IMAGEN</label>
+                        <button type="submit" class="bg-brand-700 text-white px-6 py-4 rounded-2xl font-bold text-sm shadow-lg hover:bg-brand-800 transition-all flex-1"><i class="fas fa-save mr-2"></i> GUARDAR IMAGEN</button>
+                    </div>
+                </div>
+            </form>
+        </section>
 
         <section class="space-y-12">
             <!-- 1. Textos Principales -->
@@ -806,10 +810,36 @@ include_once __DIR__ . '/includes/admin_header.php';
 
     <!-- MODULE: REDES (REUSE EXISTING LOGIC) -->
     <div id="module-contacto" class="view-module">
-        <form action="configuracion.php" method="POST">
+        <button type="button" onclick="showDashboard()" class="mb-8 text-brand-700 font-bold flex items-center"><i
+                class="fas fa-arrow-left mr-2"></i> Volver</button>
+                
+        <!-- Hero Image Upload -->
+        <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
+            <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Contacto".</p>
+            <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
+                <input type="hidden" name="update_general" value="1">
+                <?php $img_contacto = getConfig('hero_contacto'); ?>
+                <div class="w-full md:w-1/3 bg-gray-50 p-4 rounded-[2rem] border-2 border-dashed border-gray-200 text-center relative">
+                    <?php if($img_contacto): ?>
+                        <img id="preview-hero_contacto" src="../uploads/img/<?php echo $img_contacto; ?>" class="w-full h-32 object-cover rounded-xl shadow-sm">
+                    <?php else: ?>
+                        <img id="preview-hero_contacto" src="" class="w-full h-32 object-cover rounded-xl shadow-sm hidden">
+                        <div id="placeholder-hero_contacto" class="w-full h-32 bg-gray-200 rounded-xl flex items-center justify-center text-gray-400"><i class="fas fa-image text-3xl"></i></div>
+                    <?php endif; ?>
+                </div>
+                <div class="w-full md:w-2/3 space-y-4">
+                    <input type="file" name="hero_contacto" onchange="if(this.files && this.files[0]){ var r = new FileReader(); r.onload = function(e){ document.getElementById('preview-hero_contacto').src = e.target.result; document.getElementById('preview-hero_contacto').classList.remove('hidden'); var p = document.getElementById('placeholder-hero_contacto'); if(p) p.classList.add('hidden'); }; r.readAsDataURL(this.files[0]); }" class="hidden" id="hero_contacto-input">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <label for="hero_contacto-input" class="cursor-pointer bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-200 font-bold text-sm text-brand-700 hover:bg-brand-50 transition-all flex-1 text-center"><i class="fas fa-upload mr-2"></i> SELECCIONAR IMAGEN</label>
+                        <button type="submit" class="bg-brand-700 text-white px-6 py-4 rounded-2xl font-bold text-sm shadow-lg hover:bg-brand-800 transition-all flex-1"><i class="fas fa-save mr-2"></i> GUARDAR IMAGEN</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <form action="configuracion.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="update_general" value="1">
-            <button type="button" onclick="showDashboard()" class="mb-8 text-brand-700 font-bold flex items-center"><i
-                    class="fas fa-arrow-left mr-2"></i> Volver</button>
             <section class="bg-white rounded-[2.5rem] shadow-xl p-10">
                 <h4 class="text-2xl font-bold mb-10">Redes y Contacto</h4>
 
@@ -914,6 +944,32 @@ include_once __DIR__ . '/includes/admin_header.php';
             class="mb-8 text-brand-700 font-bold flex items-center hover:translate-x-[-5px] transition-transform">
             <i class="fas fa-arrow-left mr-2"></i> Volver al Panel
         </button>
+        
+        <!-- Hero Image Upload -->
+        <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
+            <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Propuesta de Valor".</p>
+            <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
+                <input type="hidden" name="update_general" value="1">
+                <?php $img_propuesta = getConfig('hero_propuesta'); ?>
+                <div class="w-full md:w-1/3 bg-gray-50 p-4 rounded-[2rem] border-2 border-dashed border-gray-200 text-center relative">
+                    <?php if($img_propuesta): ?>
+                        <img id="preview-hero_propuesta" src="../uploads/img/<?php echo $img_propuesta; ?>" class="w-full h-32 object-cover rounded-xl shadow-sm">
+                    <?php else: ?>
+                        <img id="preview-hero_propuesta" src="" class="w-full h-32 object-cover rounded-xl shadow-sm hidden">
+                        <div id="placeholder-hero_propuesta" class="w-full h-32 bg-gray-200 rounded-xl flex items-center justify-center text-gray-400"><i class="fas fa-image text-3xl"></i></div>
+                    <?php endif; ?>
+                </div>
+                <div class="w-full md:w-2/3 space-y-4">
+                    <input type="file" name="hero_propuesta" onchange="if(this.files && this.files[0]){ var r = new FileReader(); r.onload = function(e){ document.getElementById('preview-hero_propuesta').src = e.target.result; document.getElementById('preview-hero_propuesta').classList.remove('hidden'); var p = document.getElementById('placeholder-hero_propuesta'); if(p) p.classList.add('hidden'); }; r.readAsDataURL(this.files[0]); }" class="hidden" id="hero_propuesta-input">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <label for="hero_propuesta-input" class="cursor-pointer bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-200 font-bold text-sm text-brand-700 hover:bg-brand-50 transition-all flex-1 text-center"><i class="fas fa-upload mr-2"></i> SELECCIONAR IMAGEN</label>
+                        <button type="submit" class="bg-brand-700 text-white px-6 py-4 rounded-2xl font-bold text-sm shadow-lg hover:bg-brand-800 transition-all flex-1"><i class="fas fa-save mr-2"></i> GUARDAR IMAGEN</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10">
             <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
                 <div>
@@ -959,6 +1015,32 @@ include_once __DIR__ . '/includes/admin_header.php';
     <div id="module-servicios" class="view-module">
         <button onclick="showDashboard()" class="mb-8 text-brand-700 font-bold flex items-center"><i
                 class="fas fa-arrow-left mr-2"></i> Volver</button>
+                
+        <!-- Hero Image Upload -->
+        <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
+            <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Servicios Corporativos".</p>
+            <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
+                <input type="hidden" name="update_general" value="1">
+                <?php $img_servicios = getConfig('hero_servicios'); ?>
+                <div class="w-full md:w-1/3 bg-gray-50 p-4 rounded-[2rem] border-2 border-dashed border-gray-200 text-center relative">
+                    <?php if($img_servicios): ?>
+                        <img id="preview-hero_servicios" src="../uploads/img/<?php echo $img_servicios; ?>" class="w-full h-32 object-cover rounded-xl shadow-sm">
+                    <?php else: ?>
+                        <img id="preview-hero_servicios" src="" class="w-full h-32 object-cover rounded-xl shadow-sm hidden">
+                        <div id="placeholder-hero_servicios" class="w-full h-32 bg-gray-200 rounded-xl flex items-center justify-center text-gray-400"><i class="fas fa-image text-3xl"></i></div>
+                    <?php endif; ?>
+                </div>
+                <div class="w-full md:w-2/3 space-y-4">
+                    <input type="file" name="hero_servicios" onchange="if(this.files && this.files[0]){ var r = new FileReader(); r.onload = function(e){ document.getElementById('preview-hero_servicios').src = e.target.result; document.getElementById('preview-hero_servicios').classList.remove('hidden'); var p = document.getElementById('placeholder-hero_servicios'); if(p) p.classList.add('hidden'); }; r.readAsDataURL(this.files[0]); }" class="hidden" id="hero_servicios-input">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <label for="hero_servicios-input" class="cursor-pointer bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-200 font-bold text-sm text-brand-700 hover:bg-brand-50 transition-all flex-1 text-center"><i class="fas fa-upload mr-2"></i> SELECCIONAR IMAGEN</label>
+                        <button type="submit" class="bg-brand-700 text-white px-6 py-4 rounded-2xl font-bold text-sm shadow-lg hover:bg-brand-800 transition-all flex-1"><i class="fas fa-save mr-2"></i> GUARDAR IMAGEN</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10">
             <div class="flex justify-between items-center mb-10">
                 <h4 class="text-2xl font-bold">Servicios Corporativos</h4>
@@ -989,6 +1071,32 @@ include_once __DIR__ . '/includes/admin_header.php';
     <div id="module-pilares" class="view-module">
         <button onclick="showDashboard()" class="mb-8 text-brand-700 font-bold flex items-center"><i
                 class="fas fa-arrow-left mr-2"></i> Volver</button>
+                
+        <!-- Hero Image Upload -->
+        <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
+            <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Pilares Estratégicos".</p>
+            <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
+                <input type="hidden" name="update_general" value="1">
+                <?php $img_pilares = getConfig('hero_pilares'); ?>
+                <div class="w-full md:w-1/3 bg-gray-50 p-4 rounded-[2rem] border-2 border-dashed border-gray-200 text-center relative">
+                    <?php if($img_pilares): ?>
+                        <img id="preview-hero_pilares" src="../uploads/img/<?php echo $img_pilares; ?>" class="w-full h-32 object-cover rounded-xl shadow-sm">
+                    <?php else: ?>
+                        <img id="preview-hero_pilares" src="" class="w-full h-32 object-cover rounded-xl shadow-sm hidden">
+                        <div id="placeholder-hero_pilares" class="w-full h-32 bg-gray-200 rounded-xl flex items-center justify-center text-gray-400"><i class="fas fa-image text-3xl"></i></div>
+                    <?php endif; ?>
+                </div>
+                <div class="w-full md:w-2/3 space-y-4">
+                    <input type="file" name="hero_pilares" onchange="if(this.files && this.files[0]){ var r = new FileReader(); r.onload = function(e){ document.getElementById('preview-hero_pilares').src = e.target.result; document.getElementById('preview-hero_pilares').classList.remove('hidden'); var p = document.getElementById('placeholder-hero_pilares'); if(p) p.classList.add('hidden'); }; r.readAsDataURL(this.files[0]); }" class="hidden" id="hero_pilares-input">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <label for="hero_pilares-input" class="cursor-pointer bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-200 font-bold text-sm text-brand-700 hover:bg-brand-50 transition-all flex-1 text-center"><i class="fas fa-upload mr-2"></i> SELECCIONAR IMAGEN</label>
+                        <button type="submit" class="bg-brand-700 text-white px-6 py-4 rounded-2xl font-bold text-sm shadow-lg hover:bg-brand-800 transition-all flex-1"><i class="fas fa-save mr-2"></i> GUARDAR IMAGEN</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10">
             <h4 class="text-2xl font-bold mb-8">Pilares Estratégicos</h4>
             <p class="text-gray-500 mb-10">Edita los 4 pilares fundamentales que aparecen en la página de inicio.</p>
@@ -1018,6 +1126,37 @@ include_once __DIR__ . '/includes/admin_header.php';
                 <button type="submit"
                     class="mt-8 bg-brand-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg">GUARDAR
                     PILARES</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- MODULE: BLOG -->
+    <div id="module-blog" class="view-module">
+        <button type="button" onclick="showDashboard()" class="mb-8 text-brand-700 font-bold flex items-center"><i
+                class="fas fa-arrow-left mr-2"></i> Volver</button>
+                
+        <!-- Hero Image Upload -->
+        <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
+            <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Blog Académico".</p>
+            <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
+                <input type="hidden" name="update_general" value="1">
+                <?php $img_blog = getConfig('hero_blog'); ?>
+                <div class="w-full md:w-1/3 bg-gray-50 p-4 rounded-[2rem] border-2 border-dashed border-gray-200 text-center relative">
+                    <?php if($img_blog): ?>
+                        <img id="preview-hero_blog" src="../uploads/img/<?php echo $img_blog; ?>" class="w-full h-32 object-cover rounded-xl shadow-sm">
+                    <?php else: ?>
+                        <img id="preview-hero_blog" src="" class="w-full h-32 object-cover rounded-xl shadow-sm hidden">
+                        <div id="placeholder-hero_blog" class="w-full h-32 bg-gray-200 rounded-xl flex items-center justify-center text-gray-400"><i class="fas fa-image text-3xl"></i></div>
+                    <?php endif; ?>
+                </div>
+                <div class="w-full md:w-2/3 space-y-4">
+                    <input type="file" name="hero_blog" onchange="if(this.files && this.files[0]){ var r = new FileReader(); r.onload = function(e){ document.getElementById('preview-hero_blog').src = e.target.result; document.getElementById('preview-hero_blog').classList.remove('hidden'); var p = document.getElementById('placeholder-hero_blog'); if(p) p.classList.add('hidden'); }; r.readAsDataURL(this.files[0]); }" class="hidden" id="hero_blog-input">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <label for="hero_blog-input" class="cursor-pointer bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-200 font-bold text-sm text-brand-700 hover:bg-brand-50 transition-all flex-1 text-center"><i class="fas fa-upload mr-2"></i> SELECCIONAR IMAGEN</label>
+                        <button type="submit" class="bg-brand-700 text-white px-6 py-4 rounded-2xl font-bold text-sm shadow-lg hover:bg-brand-800 transition-all flex-1"><i class="fas fa-save mr-2"></i> GUARDAR IMAGEN</button>
+                    </div>
+                </div>
             </form>
         </section>
     </div>
