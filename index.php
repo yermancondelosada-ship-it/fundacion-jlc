@@ -104,6 +104,59 @@ $carrusel = $db->query("SELECT * FROM carrusel ORDER BY id ASC")->fetchAll();
         </div>
     </section>
 
+    <!-- Redes Sociales Section -->
+    <section class="py-16 bg-gray-50 border-t border-gray-100">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Nuestras Redes Sociales</h2>
+                <div class="w-20 h-1 bg-brand-700 mx-auto rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- YouTube Widget -->
+                <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fab fa-youtube text-red-600 mr-3 text-2xl"></i> Canal Oficial
+                    </h3>
+                    <div class="aspect-video w-full rounded-xl overflow-hidden bg-gray-100">
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-4">Video Destacado</p>
+                </div>
+
+                <!-- Facebook Widget -->
+                <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fab fa-facebook text-blue-600 mr-3 text-2xl"></i> Facebook
+                    </h3>
+                    <div class="w-full rounded-xl overflow-hidden bg-gray-100 flex justify-center" style="height: 250px;">
+                        <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ffacebook&tabs=timeline&width=340&height=250&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" width="100%" height="100%" style="border:none;overflow:hidden;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-4">Últimas Noticias</p>
+                </div>
+
+                <!-- Instagram Widget -->
+                <div class="bg-white rounded-[2rem] p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fab fa-instagram text-pink-600 mr-3 text-2xl"></i> Instagram
+                    </h3>
+                    <div class="w-full rounded-xl overflow-hidden bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center flex-col text-white text-center" style="height: 250px;">
+                        <div class="bg-white/10 backdrop-blur-sm w-full h-full p-6 flex flex-col items-center justify-center">
+                            <i class="fab fa-instagram text-5xl mb-3"></i>
+                            <h4 class="text-xl font-bold mb-1">@fundacionjlc_co</h4>
+                            <p class="mb-4 text-sm opacity-90">Síguenos para ver nuestro día a día.</p>
+                            <a href="https://www.instagram.com/fundacionjlc_co/" target="_blank" class="bg-white text-purple-600 font-bold py-2 px-6 rounded-full hover:scale-105 transition-transform shadow-lg text-sm">
+                                Ver Perfil
+                            </a>
+                        </div>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-4">Nuestra Galería</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <?php include_once 'includes/footer.php'; ?>
     <!-- Swiper JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <!-- Carousel Logic -->
