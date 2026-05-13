@@ -24,6 +24,36 @@ $carrusel = $db->query("SELECT * FROM carrusel ORDER BY id ASC")->fetchAll();
     <title>Fundación José Lisper Conde | Innovación y Sostenibilidad</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        <?php 
+            $h = getSiteConfig('color_h', '142');
+            $s = getSiteConfig('color_s', '70');
+            $l = getSiteConfig('color_l', '29');
+        ?>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: 'hsl(<?php echo $h; ?>, <?php echo $s; ?>%, 97%)',
+                            100: 'hsl(<?php echo $h; ?>, <?php echo $s; ?>%, 93%)',
+                            500: 'hsl(<?php echo $h; ?>, <?php echo $s; ?>%, 50%)',
+                            600: 'hsl(<?php echo $h; ?>, <?php echo $s; ?>%, 40%)',
+                            700: 'hsl(<?php echo $h; ?>, <?php echo $s; ?>%, <?php echo $l; ?>%)',
+                            800: 'hsl(<?php echo $h; ?>, <?php echo $s; ?>%, 20%)',
+                            900: 'hsl(<?php echo $h; ?>, <?php echo $s; ?>%, 15%)',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="css/style.css">
