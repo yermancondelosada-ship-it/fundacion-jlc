@@ -162,7 +162,9 @@ if (isset($_SESSION['user_id'])) {
                         <p class="text-gray-500 mb-8 line-clamp-3 text-sm flex-grow"><?php echo $curso->resumen; ?></p>
                         
                         <?php if ($estado == 'aprobado'): ?>
-                            <a href="ver-curso.php?id=<?php echo $curso->id; ?>" class="w-full bg-brand-700 text-white text-center py-5 rounded-2xl font-black shadow-xl hover:bg-brand-800 transition-all">ENTRAR AL CURSO</a>
+                            <a href="mapa-curso.php?id=<?php echo $curso->id; ?>" class="w-full bg-brand-700 text-white text-center py-5 rounded-2xl font-black shadow-xl hover:bg-brand-800 transition-all flex items-center justify-center">
+                                <i class="fas fa-map-marked-alt mr-2"></i> ENTRAR AL CURSO
+                            </a>
                         <?php elseif ($estado == 'pendiente'): ?>
                             <button disabled class="w-full bg-yellow-400 text-brand-900 py-5 rounded-2xl font-black shadow-xl cursor-not-allowed flex items-center justify-center">
                                 <i class="fas fa-clock mr-2"></i> PAGO EN VERIFICACIÓN

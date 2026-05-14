@@ -18,7 +18,7 @@ if (!$isLocal) {
 } else {
     // ENTORNO: LOCAL (Desarrollo)
     define('DB_HOST', 'localhost');
-    define('DB_NAME', 'u800252909_fjlc_db');
+    define('DB_NAME', 'plataforma_jlc');
     define('DB_USER', 'root');
     define('DB_PASS', '');
     define('BASE_URL', 'http://localhost/Tutorial PHP/');

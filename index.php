@@ -57,6 +57,15 @@ $carrusel = $db->query("SELECT * FROM carrusel ORDER BY id ASC")->fetchAll();
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        #heroSwiper {
+            width: 100% !important;
+            max-width: 100vw !important;
+        }
+        .hero-wrapper {
+            overflow: hidden;
+        }
+    </style>
 </head>
 
 <body>

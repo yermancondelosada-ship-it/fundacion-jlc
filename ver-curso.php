@@ -34,15 +34,54 @@ foreach ($modulos as &$mod) {
     $mod->lecciones = $stmt->fetchAll();
 }
 
-// 3. CURRENT LESSON
-if ($leccion_id > 0) {
-    $stmt = $db->prepare("SELECT * FROM lecciones WHERE id = ?");
-    $stmt->execute([$leccion_id]);
-    $current_lesson = $stmt->fetch();
-} else {
-    // Default to first lesson of first module
-    $current_lesson = $modulos[0]->lecciones[0] ?? null;
+// 3. HANDLE PROGRESS (Mark as completed)
+if (isset($_POST['mark_completed'])) {
+    $lec_to_complete = $_POST['leccion_id'];
+    $stmt = $db->prepare("INSERT IGNORE INTO progreso_estudiantes (user_id, curso_id, leccion_id) VALUES (?, ?, ?)");
+    $stmt->execute([$user_id, $curso_id, $lec_to_complete]);
+    
+    // Redirect to next lesson if available
+    if (isset($_POST['next_leccion_id']) && $_POST['next_leccion_id'] > 0) {
+        header("Location: ?id=$curso_id&leccion_id=" . $_POST['next_leccion_id']);
+    } else {
+        header("Location: ?id=$curso_id&leccion_id=$lec_to_complete&msg=completado");
+    }
+    exit;
 }
+
+// 4. FETCH PROGRESS
+$stmt = $db->prepare("SELECT leccion_id FROM progreso_estudiantes WHERE user_id = ? AND curso_id = ?");
+$stmt->execute([$user_id, $curso_id]);
+$completadas = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+// 5. CURRENT LESSON & NAVIGATION
+$todas_lecciones = [];
+foreach ($modulos as $mod) {
+    foreach ($mod->lecciones as $lec) {
+        $todas_lecciones[] = $lec;
+    }
+}
+
+$current_index = 0;
+if ($leccion_id > 0) {
+    foreach ($todas_lecciones as $index => $lec) {
+        if ($lec->id == $leccion_id) {
+            $current_lesson = $lec;
+            $current_index = $index;
+            break;
+        }
+    }
+} else {
+    $current_lesson = $todas_lecciones[0] ?? null;
+}
+
+$next_lesson = $todas_lecciones[$current_index + 1] ?? null;
+$prev_lesson = $todas_lecciones[$current_index - 1] ?? null;
+
+// Progress Percentage
+$total_lecciones = count($todas_lecciones);
+$total_completadas = count($completadas);
+$porcentaje = $total_lecciones > 0 ? round(($total_completadas / $total_lecciones) * 100) : 0;
 ?>
 
 <div class="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
@@ -52,25 +91,56 @@ if ($leccion_id > 0) {
         <div class="p-8 border-b border-gray-100 bg-brand-900 text-white">
             <h4 class="font-black text-xl leading-tight mb-2"><?php echo $curso->titulo; ?></h4>
             <div class="flex items-center text-xs text-green-400 font-bold uppercase tracking-widest">
-                <i class="fas fa-tasks mr-2"></i> Progreso: 0%
+                <i class="fas fa-tasks mr-2"></i> Progreso: <?php echo $porcentaje; ?>%
             </div>
+            <div class="w-full bg-brand-800 h-1.5 rounded-full mt-4 overflow-hidden">
+                <div class="bg-green-400 h-full transition-all duration-500" style="width: <?php echo $porcentaje; ?>%"></div>
+            </div>
+            <a href="mapa-curso.php?id=<?php echo $curso_id; ?>" class="mt-6 block w-full text-center py-3 bg-brand-800 hover:bg-brand-700 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all">
+                <i class="fas fa-map mr-2"></i> Ver Mapa de Curso
+            </a>
         </div>
 
         <div class="p-4 space-y-4">
             <?php foreach($modulos as $mod): ?>
             <div class="space-y-2">
                 <h5 class="px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400"><?php echo $mod->nombre; ?></h5>
-                <?php foreach($mod->lecciones as $lec): ?>
-                <a href="?id=<?php echo $curso_id; ?>&leccion_id=<?php echo $lec->id; ?>" 
-                   class="flex items-center p-4 rounded-2xl transition-all group <?php echo $current_lesson && $current_lesson->id == $lec->id ? 'bg-brand-50 border-l-4 border-brand-700' : 'hover:bg-gray-50'; ?>">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-4 <?php echo $current_lesson && $current_lesson->id == $lec->id ? 'bg-brand-700 text-white' : 'bg-gray-100 text-gray-400 group-hover:bg-brand-100 group-hover:text-brand-700'; ?>">
-                        <i class="fas fa-play text-[10px]"></i>
+                <?php 
+                $prev_was_completed = true; // First lesson is always unlocked
+                foreach($mod->lecciones as $index => $lec): 
+                    $is_completed = in_array($lec->id, $completadas);
+                    $is_current = $current_lesson && $current_lesson->id == $lec->id;
+                    $is_locked = !$is_completed && !$is_current && !$prev_was_completed;
+                ?>
+                <a href="<?php echo $is_locked ? '#' : '?id='.$curso_id.'&leccion_id='.$lec->id; ?>" 
+                   class="flex items-center p-4 rounded-2xl transition-all group <?php echo $is_current ? 'bg-brand-50 border-l-4 border-brand-700' : ($is_locked ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'); ?>">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-4 <?php echo $is_current ? 'bg-brand-700 text-white' : ($is_completed ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'); ?>">
+                        <?php if($is_completed): ?>
+                            <i class="fas fa-check text-[10px]"></i>
+                        <?php elseif($is_locked): ?>
+                            <i class="fas fa-lock text-[10px]"></i>
+                        <?php else: ?>
+                            <?php if($lec->tipo == 'video'): ?>
+                                <i class="fas fa-play text-[10px]"></i>
+                            <?php elseif($lec->tipo == 'actividad'): ?>
+                                <i class="fas fa-puzzle-piece text-[10px]"></i>
+                            <?php else: ?>
+                                <i class="fas fa-file-alt text-[10px]"></i>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     </div>
-                    <span class="text-sm font-bold <?php echo $current_lesson && $current_lesson->id == $lec->id ? 'text-brand-900' : 'text-gray-600 group-hover:text-gray-900'; ?>">
-                        <?php echo $lec->titulo; ?>
-                    </span>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-bold <?php echo $is_current ? 'text-brand-900' : 'text-gray-600'; ?>">
+                            <?php echo $lec->titulo; ?>
+                        </span>
+                        <span class="text-[9px] uppercase tracking-widest font-black text-gray-400">
+                            <?php echo $lec->tipo; ?>
+                        </span>
+                    </div>
                 </a>
-                <?php endforeach; ?>
+                <?php 
+                    $prev_was_completed = $is_completed;
+                endforeach; ?>
             </div>
             <?php endforeach; ?>
         </div>
@@ -121,12 +191,24 @@ if ($leccion_id > 0) {
 
                 <!-- Navigation Controls -->
                 <div class="flex justify-between items-center pt-12 border-t">
-                    <button class="flex items-center text-gray-400 font-bold hover:text-brand-700 transition-colors">
+                    <?php if($prev_lesson): ?>
+                    <a href="?id=<?php echo $curso_id; ?>&leccion_id=<?php echo $prev_lesson->id; ?>" class="flex items-center text-gray-400 font-bold hover:text-brand-700 transition-colors">
                         <i class="fas fa-arrow-left mr-2"></i> Anterior
-                    </button>
-                    <button class="flex items-center bg-brand-700 text-white px-10 py-4 rounded-2xl font-black shadow-xl hover:bg-brand-800 transition-all">
-                        SIGUIENTE LECCIÓN <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
+                    </a>
+                    <?php else: ?>
+                    <div></div>
+                    <?php endif; ?>
+
+                    <form action="" method="POST">
+                        <input type="hidden" name="mark_completed" value="1">
+                        <input type="hidden" name="leccion_id" value="<?php echo $current_lesson->id; ?>">
+                        <input type="hidden" name="next_leccion_id" value="<?php echo $next_lesson ? $next_lesson->id : 0; ?>">
+                        
+                        <button type="submit" class="flex items-center bg-brand-700 text-white px-10 py-4 rounded-2xl font-black shadow-xl hover:bg-brand-800 transition-all transform hover:-translate-y-1">
+                            <?php echo $next_lesson ? 'SIGUIENTE LECCIÓN' : 'FINALIZAR CURSO'; ?> 
+                            <i class="fas <?php echo $next_lesson ? 'fa-arrow-right' : 'fa-graduation-cap'; ?> ml-2"></i>
+                        </button>
+                    </form>
                 </div>
 
             </div>

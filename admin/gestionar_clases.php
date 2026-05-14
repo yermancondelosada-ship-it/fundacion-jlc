@@ -35,9 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action_leccion'])) {
     $titulo = $_POST['titulo'];
     $video_url = $_POST['video_url'];
     $contenido = $_POST['contenido'];
+    $tipo = $_POST['tipo'] ?? 'video';
     
-    $stmt = $db->prepare("INSERT INTO lecciones (modulo_id, titulo, contenido, video_url) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$modulo_id, $titulo, $contenido, $video_url]);
+    $stmt = $db->prepare("INSERT INTO lecciones (modulo_id, titulo, contenido, video_url, tipo) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$modulo_id, $titulo, $contenido, $video_url, $tipo]);
     header("Location: gestionar_clases.php?curso_id=$curso_id&msg=leccion_agregada");
     exit;
 }
@@ -155,11 +156,15 @@ foreach ($modulos as &$mod) {
                             <div>
                                 <p class="font-bold text-gray-900 group-hover/item:text-brand-700 transition-colors"><?php echo $lec->titulo; ?></p>
                                 <div class="flex items-center space-x-4 mt-1">
-                                    <?php if($lec->video_url): ?>
-                                        <span class="text-[9px] text-brand-600 font-black uppercase tracking-widest flex items-center">
+                                    <span class="text-[9px] text-brand-600 font-black uppercase tracking-widest flex items-center">
+                                        <?php if($lec->tipo == 'video'): ?>
                                             <i class="fab fa-youtube mr-1 text-sm"></i> Video de Clase
-                                        </span>
-                                    <?php endif; ?>
+                                        <?php elseif($lec->tipo == 'actividad'): ?>
+                                            <i class="fas fa-tasks mr-1 text-sm"></i> Actividad Práctica
+                                        <?php elseif($lec->tipo == 'evaluacion'): ?>
+                                            <i class="fas fa-file-signature mr-1 text-sm"></i> Evaluación
+                                        <?php endif; ?>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -192,12 +197,22 @@ foreach ($modulos as &$mod) {
             <input type="hidden" name="modulo_id" id="modalModuloId">
             
             <div class="space-y-6">
-                <div>
-                    <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-3">Título de la Lección</label>
-                    <input type="text" name="titulo" required placeholder="Ej: Introducción a la variable" class="w-full px-6 py-4 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-brand-500 font-bold text-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-3">Título de la Lección</label>
+                        <input type="text" name="titulo" required placeholder="Ej: Introducción" class="w-full px-6 py-4 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-brand-500 font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-3">Tipo de Contenido</label>
+                        <select name="tipo" class="w-full px-6 py-4 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-brand-500 font-bold">
+                            <option value="video">🎥 Video de Clase</option>
+                            <option value="actividad">🧩 Actividad / Tarea</option>
+                            <option value="evaluacion">📝 Evaluación</option>
+                        </select>
+                    </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-3">Link de YouTube</label>
+                    <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-3">Link de YouTube (Si aplica)</label>
                     <input type="text" name="video_url" placeholder="https://www.youtube.com/watch?v=..." class="w-full px-6 py-4 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-brand-500">
                 </div>
                 <div>
