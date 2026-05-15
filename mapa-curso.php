@@ -3,11 +3,15 @@ require_once 'config/config.php';
 require_once 'config/db.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: aula-virtual.php"); exit;
+    header("Location: aula-virtual.php");
+    exit;
 }
 
-$curso_id = (int)($_GET['id'] ?? 0);
-if ($curso_id <= 0) { header("Location: aula-virtual.php"); exit; }
+$curso_id = (int) ($_GET['id'] ?? 0);
+if ($curso_id <= 0) {
+    header("Location: aula-virtual.php");
+    exit;
+}
 $user_id = $_SESSION['user_id'];
 $db = Database::getInstance();
 
@@ -15,10 +19,28 @@ $db = Database::getInstance();
 $stmt = $db->prepare("SELECT estado FROM inscripciones WHERE user_id = ? AND curso_id = ? AND estado = 'aprobado'");
 $stmt->execute([$user_id, $curso_id]);
 if (!$stmt->fetch()) {
-    header("Location: aula-virtual.php?error=acceso_denegado"); exit;
+    header("Location: aula-virtual.php?error=acceso_denegado");
+    exit;
 }
 
 include_once 'includes/header.php';
+
+// VERIFICACIÓN DE BASE DE DATOS (MIGRACIÓN)
+try {
+    $db->query("SELECT 1 FROM progreso_estudiantes LIMIT 1");
+} catch (Exception $e) {
+    echo "<div class='p-20 text-center'>
+            <div class='bg-red-50 text-red-600 p-10 rounded-3xl border border-red-100 shadow-xl inline-block max-w-2xl'>
+                <i class='fas fa-database text-5xl mb-4'></i>
+                <h2 class='text-2xl font-black mb-2'>ERROR DE BASE DE DATOS</h2>
+                <p class='font-bold mb-4'>Parece que falta la tabla de progreso. Por favor, ejecuta el archivo de migración en tu servidor:</p>
+                <code class='bg-red-100 px-4 py-2 rounded-lg block mb-4 text-sm'>tudominio.com/admin/migrate.php</code>
+                <p class='text-xs opacity-70'>Error: " . $e->getMessage() . "</p>
+            </div>
+          </div>";
+    include_once 'includes/footer.php';
+    exit;
+}
 
 // 2. FETCH DATA
 $stmt = $db->prepare("SELECT * FROM cursos WHERE id = ?");
@@ -27,9 +49,9 @@ $curso = $stmt->fetch();
 if (!$curso) {
     echo "<div class='min-h-screen flex items-center justify-center bg-gray-50 p-20 text-center font-black text-gray-400'>
             <div><i class='fas fa-exclamation-circle text-6xl mb-4'></i><br>ERROR: Curso no encontrado.</div>
-          </div>"; 
+          </div>";
     include_once 'includes/footer.php';
-    exit; 
+    exit;
 }
 
 $modulos_stmt = $db->prepare("SELECT * FROM modulos WHERE curso_id = ? ORDER BY orden ASC");
@@ -72,13 +94,11 @@ foreach ($modulos as $mod) {
         left: 50%;
         width: 4px;
         height: 100%;
-        background: repeating-linear-gradient(
-            to bottom,
-            #cbd5e1 0px,
-            #cbd5e1 10px,
-            transparent 10px,
-            transparent 20px
-        );
+        background: repeating-linear-gradient(to bottom,
+                #cbd5e1 0px,
+                #cbd5e1 10px,
+                transparent 10px,
+                transparent 20px);
         transform: translateX(-50%);
         z-index: 0;
     }
@@ -97,7 +117,7 @@ foreach ($modulos as $mod) {
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
-        box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1);
+        box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
         cursor: pointer;
         background: white;
         border: 4px solid white;
@@ -124,9 +144,20 @@ foreach ($modulos as $mod) {
     }
 
     @keyframes pulse {
-        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4); }
-        70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(14, 165, 233, 0); }
-        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4);
+        }
+
+        70% {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 15px rgba(14, 165, 233, 0);
+        }
+
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(14, 165, 233, 0);
+        }
     }
 
     .module-banner {
@@ -140,26 +171,28 @@ foreach ($modulos as $mod) {
         font-size: 0.75rem;
         display: inline-block;
         margin-bottom: 2rem;
-        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
 
-    .zig-zag:nth-child(even) { flex-direction: row-reverse; }
-
+    .zig-zag:nth-child(even) {
+        flex-direction: row-reverse;
+    }
 </style>
 
 <div class="map-container">
     <div class="path-line"></div>
-    
+
     <div class="max-w-4xl mx-auto relative">
-        
+
         <!-- Header -->
         <div class="text-center mb-20">
             <h1 class="text-5xl font-black text-slate-900 mb-4"><?php echo $curso->titulo; ?></h1>
             <p class="text-slate-500 font-bold tracking-widest uppercase text-sm">Tu Mapa de Aprendizaje</p>
-            
+
             <div class="mt-8 flex justify-center gap-8">
                 <div class="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-100">
-                    <span class="block text-2xl font-black text-slate-900"><?php echo count($completadas); ?>/<?php echo count($todas_lecciones); ?></span>
+                    <span
+                        class="block text-2xl font-black text-slate-900"><?php echo count($completadas); ?>/<?php echo count($todas_lecciones); ?></span>
                     <span class="text-[10px] font-bold text-slate-400 uppercase">Lecciones</span>
                 </div>
                 <div class="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-100">
@@ -171,60 +204,63 @@ foreach ($modulos as $mod) {
 
         <!-- Course Map Nodes -->
         <div class="space-y-32">
-            <?php 
+            <?php
             $prev_was_completed = true;
-            foreach($modulos as $mod_index => $mod): 
-            ?>
-            <div class="flex flex-col items-center">
-                <div class="module-banner"><?php echo $mod->nombre; ?></div>
-                
-                <div class="grid grid-cols-1 gap-16 w-full max-w-lg">
-                    <?php foreach($mod->lecciones as $lec_index => $lec): 
-                        $is_completed = in_array($lec->id, $completadas);
-                        // A lesson is current if it's the first non-completed one
-                        $is_current = false;
-                        if (!$is_completed && $prev_was_completed) {
-                            $is_current = true;
-                        }
-                        $is_locked = !$is_completed && !$is_current && !$prev_was_completed;
-                        
-                        // Alternate alignment
-                        $align = ($lec_index % 2 == 0) ? 'mr-auto' : 'ml-auto';
-                    ?>
-                    <div class="node flex items-center <?php echo $align; ?> <?php echo $is_completed ? 'completed' : ($is_current ? 'current' : 'locked'); ?>">
-                        <a href="<?php echo $is_locked ? '#' : 'ver-curso.php?id='.$curso_id.'&leccion_id='.$lec->id; ?>" 
-                           class="flex flex-col items-center group">
-                            <div class="node-icon mb-4 hover:scale-110 transition-transform">
-                                <?php if($is_completed): ?>
-                                    <i class="fas fa-check"></i>
-                                <?php elseif($is_locked): ?>
-                                    <i class="fas fa-lock"></i>
-                                <?php else: ?>
-                                    <?php if($lec->tipo == 'video'): ?>
-                                        <i class="fas fa-play"></i>
-                                    <?php elseif($lec->tipo == 'actividad'): ?>
-                                        <i class="fas fa-puzzle-piece"></i>
-                                    <?php else: ?>
-                                        <i class="fas fa-file-alt"></i>
-                                    <?php endif; ?>
-                                <?php endif; ?>
+            foreach ($modulos as $mod_index => $mod):
+                ?>
+                <div class="flex flex-col items-center">
+                    <div class="module-banner"><?php echo $mod->nombre; ?></div>
+
+                    <div class="grid grid-cols-1 gap-16 w-full max-w-lg">
+                        <?php foreach ($mod->lecciones as $lec_index => $lec):
+                            $is_completed = in_array($lec->id, $completadas);
+                            // A lesson is current if it's the first non-completed one
+                            $is_current = false;
+                            if (!$is_completed && $prev_was_completed) {
+                                $is_current = true;
+                            }
+                            $is_locked = !$is_completed && !$is_current && !$prev_was_completed;
+
+                            // Alternate alignment
+                            $align = ($lec_index % 2 == 0) ? 'mr-auto' : 'ml-auto';
+                            ?>
+                            <div
+                                class="node flex items-center <?php echo $align; ?> <?php echo $is_completed ? 'completed' : ($is_current ? 'current' : 'locked'); ?>">
+                                <a href="<?php echo $is_locked ? '#' : 'ver-curso.php?id=' . $curso_id . '&leccion_id=' . $lec->id; ?>"
+                                    class="flex flex-col items-center group">
+                                    <div class="node-icon mb-4 hover:scale-110 transition-transform">
+                                        <?php if ($is_completed): ?>
+                                            <i class="fas fa-check"></i>
+                                        <?php elseif ($is_locked): ?>
+                                            <i class="fas fa-lock"></i>
+                                        <?php else: ?>
+                                            <?php if ($lec->tipo == 'video'): ?>
+                                                <i class="fas fa-play"></i>
+                                            <?php elseif ($lec->tipo == 'actividad'): ?>
+                                                <i class="fas fa-puzzle-piece"></i>
+                                            <?php else: ?>
+                                                <i class="fas fa-file-alt"></i>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                    <span
+                                        class="text-xs font-black text-slate-900 group-hover:text-brand-700 transition-colors bg-white/80 backdrop-blur px-3 py-1 rounded-full shadow-sm">
+                                        <?php echo $lec->titulo; ?>
+                                    </span>
+                                </a>
                             </div>
-                            <span class="text-xs font-black text-slate-900 group-hover:text-brand-700 transition-colors bg-white/80 backdrop-blur px-3 py-1 rounded-full shadow-sm">
-                                <?php echo $lec->titulo; ?>
-                            </span>
-                        </a>
+                            <?php
+                            $prev_was_completed = $is_completed;
+                        endforeach; ?>
                     </div>
-                    <?php 
-                        $prev_was_completed = $is_completed;
-                    endforeach; ?>
                 </div>
-            </div>
             <?php endforeach; ?>
         </div>
 
         <!-- Footer Goal -->
         <div class="mt-40 text-center">
-            <div class="w-24 h-24 bg-brand-900 text-white rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 shadow-2xl animate-bounce">
+            <div
+                class="w-24 h-24 bg-brand-900 text-white rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 shadow-2xl animate-bounce">
                 <i class="fas fa-trophy text-3xl"></i>
             </div>
             <h3 class="text-2xl font-black text-slate-900">¡Meta Final!</h3>
