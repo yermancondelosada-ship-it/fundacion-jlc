@@ -1,13 +1,13 @@
 <?php
 require_once 'config/config.php';
 require_once 'config/db.php';
-include_once 'includes/header.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: aula-virtual.php"); exit;
 }
 
-$curso_id = $_GET['id'] ?? 0;
+$curso_id = (int)($_GET['id'] ?? 0);
+if ($curso_id <= 0) { header("Location: aula-virtual.php"); exit; }
 $user_id = $_SESSION['user_id'];
 $db = Database::getInstance();
 
@@ -18,20 +18,30 @@ if (!$stmt->fetch()) {
     header("Location: aula-virtual.php?error=acceso_denegado"); exit;
 }
 
+include_once 'includes/header.php';
+
 // 2. FETCH DATA
 $stmt = $db->prepare("SELECT * FROM cursos WHERE id = ?");
 $stmt->execute([$curso_id]);
 $curso = $stmt->fetch();
+if (!$curso) {
+    echo "<div class='min-h-screen flex items-center justify-center bg-gray-50 p-20 text-center font-black text-gray-400'>
+            <div><i class='fas fa-exclamation-circle text-6xl mb-4'></i><br>ERROR: Curso no encontrado.</div>
+          </div>"; 
+    include_once 'includes/footer.php';
+    exit; 
+}
 
 $modulos_stmt = $db->prepare("SELECT * FROM modulos WHERE curso_id = ? ORDER BY orden ASC");
 $modulos_stmt->execute([$curso_id]);
-$modulos = $modulos_stmt->fetchAll();
+$modulos = $modulos_stmt->fetchAll() ?: [];
 
 foreach ($modulos as &$mod) {
     $stmt = $db->prepare("SELECT * FROM lecciones WHERE modulo_id = ? ORDER BY orden ASC");
     $stmt->execute([$mod->id]);
-    $mod->lecciones = $stmt->fetchAll();
+    $mod->lecciones = $stmt->fetchAll() ?: [];
 }
+unset($mod);
 
 $stmt = $db->prepare("SELECT leccion_id FROM progreso_estudiantes WHERE user_id = ? AND curso_id = ?");
 $stmt->execute([$user_id, $curso_id]);
