@@ -495,7 +495,8 @@ include_once __DIR__ . '/includes/admin_header.php';
             <i class="fas fa-arrow-left mr-2"></i> Volver al Panel
         </button>
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10">
-            <h4 class="text-2xl font-bold mb-8">Gestión de Carrusel</h4>
+            <h4 class="text-2xl font-bold mb-2">Gestión de Carrusel</h4>
+            <p class="text-gray-500 mb-8"><i class="fas fa-info-circle text-brand-700 mr-2"></i> Para que las imágenes no se vean cortadas y luzcan profesionales, usa un tamaño de <b>1920 x 500 píxeles</b>.</p>
             <div class="bg-gray-50 rounded-3xl p-6 mb-8 border border-gray-100">
                 <form action="configuracion.php" method="POST" class="flex items-center space-x-4">
                     <input type="hidden" name="update_carrusel_speed" value="1">
@@ -1393,7 +1394,7 @@ include_once __DIR__ . '/includes/admin_header.php';
         <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="space-y-6">
             <input type="hidden" name="action_carrusel" value="add">
             <div>
-                <label class="block text-sm font-bold mb-2">Imagen (Recomendado 1920x800)</label>
+                <label class="block text-sm font-bold mb-2">Imagen (Tamaño ideal: 1920x500 píxeles)</label>
                 <input type="file" name="imagen" required class="text-sm">
             </div>
             <div>
