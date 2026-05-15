@@ -79,195 +79,449 @@ foreach ($modulos as $mod) {
 ?>
 
 <style>
-    .map-container {
-        background: radial-gradient(circle at top right, #f8fafc, #f1f5f9);
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Outfit:wght@300;400;600;900&display=swap');
+
+    :root {
+        --magic-cyan: #06b6d4;
+        --magic-gold: #fbbf24;
+        --magic-locked: #94a3b8;
+    }
+
+    body {
+        overflow-x: hidden;
+        background: #0f172a;
+    }
+
+    .map-world {
         min-height: 100vh;
-        padding: 4rem 1rem;
+        background-image: url('uploads/gamificacion/map_bg.png');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
         position: relative;
-        overflow: hidden;
+        padding-top: 100px;
+        padding-bottom: 200px;
     }
 
-    /* The decorative path line */
-    .path-line {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        width: 4px;
+    /* Hero Widget */
+    .hero-widget {
+        position: fixed;
+        top: 120px;
+        right: 40px;
+        z-index: 100;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(12px);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        padding: 1.2rem;
+        border-radius: 2.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        animation: slideInRight 1s cubic-bezier(0.16, 1, 0.3, 1);
+        border-left: 4px solid var(--magic-cyan);
+    }
+
+    @keyframes slideInRight {
+        from { transform: translateX(120%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    .avatar-ring {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        padding: 4px;
+        background: linear-gradient(135deg, var(--magic-cyan), var(--magic-gold));
+        position: relative;
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+    }
+
+    .avatar-ring img {
+        width: 100%;
         height: 100%;
-        background: repeating-linear-gradient(to bottom,
-                #cbd5e1 0px,
-                #cbd5e1 10px,
-                transparent 10px,
-                transparent 20px);
-        transform: translateX(-50%);
-        z-index: 0;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #0f172a;
     }
 
-    .node {
+    .level-badge {
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+        background: var(--magic-gold);
+        color: #000;
+        font-weight: 900;
+        font-size: 0.75rem;
+        padding: 2px 8px;
+        border-radius: 12px;
+        border: 2px solid #0f172a;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .exp-container {
+        width: 160px;
+    }
+
+    .exp-bar-bg {
+        height: 10px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 20px;
+        overflow: hidden;
+        margin-top: 6px;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .exp-bar-fill {
+        height: 100%;
+        background: linear-gradient(to right, var(--magic-cyan), #22d3ee);
+        box-shadow: 0 0 15px var(--magic-cyan);
+        transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Island Nodes */
+    .campaign-path {
+        max-width: 1100px;
+        margin: 0 auto;
         position: relative;
-        z-index: 10;
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .node-icon {
-        width: 80px;
-        height: 80px;
-        border-radius: 2rem;
+    .island-node {
+        position: relative;
+        width: 320px;
+        height: 320px;
+        margin-bottom: -60px;
+        z-index: 10;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .island-node:hover {
+        transform: translateY(-20px) scale(1.08);
+    }
+
+    .island-img {
+        width: 100%;
+        height: 100%;
+        background-image: url('uploads/gamificacion/island_portal.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: relative;
+        animation: float 5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(1deg); }
+    }
+
+    /* State: Locked */
+    .island-node.locked .island-img {
+        filter: grayscale(1) brightness(0.6) contrast(1.2);
+    }
+    .island-node.locked .portal-glow {
+        display: none;
+    }
+    .lock-chain {
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3.5rem;
+        color: rgba(255,255,255,0.6);
+        z-index: 20;
+        text-shadow: 0 0 25px rgba(0,0,0,0.9);
+        filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+    }
+
+    /* State: Completed */
+    .island-node.completed .portal-glow {
+        background: radial-gradient(circle, var(--magic-gold) 0%, transparent 70%);
+        opacity: 0.5;
+    }
+    .completion-badge {
+        position: absolute;
+        top: 25%;
+        right: 25%;
+        background: linear-gradient(135deg, var(--magic-gold), #d97706);
+        color: #fff;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.5rem;
-        box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-        background: white;
-        border: 4px solid white;
+        font-size: 1.3rem;
+        box-shadow: 0 0 25px var(--magic-gold);
+        z-index: 30;
+        border: 3px solid white;
+        animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .node.completed .node-icon {
-        background: linear-gradient(135deg, #22c55e, #16a34a);
+    @keyframes popIn {
+        from { transform: scale(0) rotate(-45deg); opacity: 0; }
+        to { transform: scale(1) rotate(0); opacity: 1; }
+    }
+
+    /* State: Current (Active) */
+    .island-node.current .portal-glow {
+        background: radial-gradient(circle, var(--magic-cyan) 0%, transparent 75%);
+        opacity: 0.9;
+        animation: pulseGlow 2.5s infinite;
+    }
+
+    @keyframes pulseGlow {
+        0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; box-shadow: 0 0 30px var(--magic-cyan); }
+        50% { transform: translate(-50%, -50%) scale(1.4); opacity: 0.3; box-shadow: 0 0 60px var(--magic-cyan); }
+    }
+
+    .portal-glow {
+        position: absolute;
+        top: 48%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        z-index: 5;
+        pointer-events: none;
+    }
+
+    .island-label {
+        position: absolute;
+        bottom: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(15, 23, 42, 0.9);
         color: white;
-        box-shadow: 0 15px 30px -10px rgba(34, 197, 94, 0.4);
+        padding: 0.7rem 1.8rem;
+        border-radius: 1.2rem;
+        white-space: nowrap;
+        font-family: 'Cinzel', serif;
+        font-size: 0.95rem;
+        border: 2px solid rgba(255,255,255,0.1);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        transition: all 0.3s ease;
     }
 
-    .node.current .node-icon {
-        background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    .island-node:hover .island-label {
+        border-color: var(--magic-cyan);
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+    }
+
+    /* Staggered Path Logic */
+    .node-container:nth-child(4n+1) .island-node { margin-left: 5%; }
+    .node-container:nth-child(4n+2) .island-node { margin-left: 35%; }
+    .node-container:nth-child(4n+3) .island-node { margin-left: 60%; }
+    .node-container:nth-child(4n+4) .island-node { margin-left: 30%; }
+
+    /* SVG Path Overlay */
+    #path-svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .energy-path {
+        fill: none;
+        stroke: var(--magic-cyan);
+        stroke-width: 5;
+        stroke-linecap: round;
+        stroke-dasharray: 12, 18;
+        animation: flow 25s linear infinite;
+        opacity: 0.35;
+        filter: drop-shadow(0 0 8px var(--magic-cyan));
+    }
+
+    @keyframes flow {
+        from { stroke-dashoffset: 300; }
+        to { stroke-dashoffset: 0; }
+    }
+
+    .course-title-banner {
+        text-align: center;
+        margin-bottom: 80px;
+        position: relative;
+    }
+
+    .course-title-banner h1 {
+        font-family: 'Cinzel', serif;
+        font-size: 4.5rem;
         color: white;
-        box-shadow: 0 0 0 8px rgba(14, 165, 233, 0.2);
-        animation: pulse 2s infinite;
-    }
-
-    .node.locked .node-icon {
-        background: #f1f5f9;
-        color: #94a3b8;
-        filter: grayscale(1);
-        cursor: not-allowed;
-    }
-
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4);
-        }
-
-        70% {
-            transform: scale(1.05);
-            box-shadow: 0 0 0 15px rgba(14, 165, 233, 0);
-        }
-
-        100% {
-            transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(14, 165, 233, 0);
-        }
-    }
-
-    .module-banner {
-        background: #0f172a;
-        color: white;
-        padding: 0.75rem 2rem;
-        border-radius: 1rem;
-        font-weight: 900;
+        text-shadow: 0 0 40px rgba(6, 182, 212, 0.6), 0 8px 20px rgba(0,0,0,0.9);
+        letter-spacing: 6px;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
-        font-size: 0.75rem;
-        display: inline-block;
-        margin-bottom: 2rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
 
-    .zig-zag:nth-child(even) {
-        flex-direction: row-reverse;
+    /* Responsiveness */
+    @media (max-width: 1024px) {
+        .campaign-path { max-width: 100%; padding: 0 20px; }
+        .island-node { width: 260px; height: 260px; }
+        .node-container:nth-child(n) .island-node { margin-left: auto !important; margin-right: auto !important; }
+    }
+
+    @media (max-width: 768px) {
+        .hero-widget {
+            top: auto;
+            bottom: 30px;
+            right: 20px;
+            left: 20px;
+            width: auto;
+            animation: slideInUp 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideInUp {
+            from { transform: translateY(120%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .course-title-banner h1 { font-size: 2.2rem; }
+        .island-node { width: 220px; height: 220px; margin-bottom: 20px; }
+        .island-label { padding: 0.5rem 1.2rem; font-size: 0.8rem; }
     }
 </style>
 
-<div class="map-container">
-    <div class="path-line"></div>
-
-    <div class="max-w-4xl mx-auto relative">
-
-        <!-- Header -->
-        <div class="text-center mb-20">
-            <h1 class="text-5xl font-black text-slate-900 mb-4"><?php echo $curso->titulo; ?></h1>
-            <p class="text-slate-500 font-bold tracking-widest uppercase text-sm">Tu Mapa de Aprendizaje</p>
-
-            <div class="mt-8 flex justify-center gap-8">
-                <div class="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-100">
-                    <span
-                        class="block text-2xl font-black text-slate-900"><?php echo count($completadas); ?>/<?php echo count($todas_lecciones); ?></span>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase">Lecciones</span>
+<div class="map-world">
+    <!-- Hero Widget -->
+    <div class="hero-widget">
+        <div class="avatar-ring">
+            <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['user_nombre']); ?>&background=random" alt="Avatar">
+            <?php 
+                $num_completadas = count($completadas);
+                $nivel = floor($num_completadas / 2) + 1;
+                $progreso_total = count($todas_lecciones) > 0 ? ($num_completadas / count($todas_lecciones)) * 100 : 0;
+            ?>
+            <div class="level-badge">LV <?php echo $nivel; ?></div>
+        </div>
+        <div class="text-white">
+            <div class="text-[10px] font-black uppercase tracking-[0.2em] opacity-50 mb-1">Misión de Aprendizaje</div>
+            <div class="font-black text-xl tracking-tight"><?php echo explode(' ', $_SESSION['user_nombre'])[0]; ?></div>
+            <div class="exp-container mt-2">
+                <div class="flex justify-between text-[10px] font-black mb-1 opacity-80">
+                    <span>PROGRESS</span>
+                    <span class="text-magic-cyan"><?php echo round($progreso_total); ?>%</span>
                 </div>
-                <div class="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-100">
-                    <span class="block text-2xl font-black text-brand-700"><?php echo count($modulos); ?></span>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase">Módulos</span>
+                <div class="exp-bar-bg">
+                    <div class="exp-bar-fill" style="width: <?php echo $progreso_total; ?>%"></div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Course Map Nodes -->
-        <div class="space-y-32">
-            <?php
+    <div class="campaign-path">
+        <!-- SVG Container for lines -->
+        <svg id="path-svg"></svg>
+
+        <div class="course-title-banner">
+            <div class="text-magic-cyan font-black tracking-[0.4em] text-xs mb-3 uppercase opacity-80">Mapa de Campaña Estudiantil</div>
+            <h1><?php echo $curso->titulo; ?></h1>
+        </div>
+
+        <div class="nodes-wrapper relative">
+            <?php 
             $prev_was_completed = true;
-            foreach ($modulos as $mod_index => $mod):
-                ?>
-                <div class="flex flex-col items-center">
-                    <div class="module-banner"><?php echo $mod->nombre; ?></div>
+            $node_counter = 0;
+            foreach ($modulos as $mod): 
+                foreach ($mod->lecciones as $lec):
+                    $is_completed = in_array($lec->id, $completadas);
+                    $is_current = false;
+                    if (!$is_completed && $prev_was_completed) {
+                        $is_current = true;
+                    }
+                    $is_locked = !$is_completed && !$is_current && !$prev_was_completed;
+                    
+                    $state_class = $is_completed ? 'completed' : ($is_current ? 'current' : 'locked');
+                    $node_counter++;
+            ?>
+                <div class="node-container">
+                    <div class="island-node <?php echo $state_class; ?>" id="node-<?php echo $node_counter; ?>" 
+                         onclick="<?php echo $is_locked ? 'alert(\'¡Este portal está sellado! Completa el anterior para avanzar.\')' : "window.location='ver-curso.php?id=$curso_id&leccion_id=$lec->id'"; ?>">
+                        
+                        <div class="island-img">
+                            <div class="portal-glow"></div>
+                            
+                            <?php if($is_locked): ?>
+                                <div class="lock-chain">
+                                    <i class="fas fa-lock text-slate-400"></i>
+                                </div>
+                            <?php endif; ?>
 
-                    <div class="grid grid-cols-1 gap-16 w-full max-w-lg">
-                        <?php foreach ($mod->lecciones as $lec_index => $lec):
-                            $is_completed = in_array($lec->id, $completadas);
-                            // A lesson is current if it's the first non-completed one
-                            $is_current = false;
-                            if (!$is_completed && $prev_was_completed) {
-                                $is_current = true;
-                            }
-                            $is_locked = !$is_completed && !$is_current && !$prev_was_completed;
+                            <?php if($is_completed): ?>
+                                <div class="completion-badge">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                            <?php endif; ?>
+                        </div>
 
-                            // Alternate alignment
-                            $align = ($lec_index % 2 == 0) ? 'mr-auto' : 'ml-auto';
-                            ?>
-                            <div
-                                class="node flex items-center <?php echo $align; ?> <?php echo $is_completed ? 'completed' : ($is_current ? 'current' : 'locked'); ?>">
-                                <a href="<?php echo $is_locked ? '#' : 'ver-curso.php?id=' . $curso_id . '&leccion_id=' . $lec->id; ?>"
-                                    class="flex flex-col items-center group">
-                                    <div class="node-icon mb-4 hover:scale-110 transition-transform">
-                                        <?php if ($is_completed): ?>
-                                            <i class="fas fa-check"></i>
-                                        <?php elseif ($is_locked): ?>
-                                            <i class="fas fa-lock"></i>
-                                        <?php else: ?>
-                                            <?php if ($lec->tipo == 'video'): ?>
-                                                <i class="fas fa-play"></i>
-                                            <?php elseif ($lec->tipo == 'actividad'): ?>
-                                                <i class="fas fa-puzzle-piece"></i>
-                                            <?php else: ?>
-                                                <i class="fas fa-file-alt"></i>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                    </div>
-                                    <span
-                                        class="text-xs font-black text-slate-900 group-hover:text-brand-700 transition-colors bg-white/80 backdrop-blur px-3 py-1 rounded-full shadow-sm">
-                                        <?php echo $lec->titulo; ?>
-                                    </span>
-                                </a>
-                            </div>
-                            <?php
-                            $prev_was_completed = $is_completed;
-                        endforeach; ?>
+                        <div class="island-label">
+                            <span class="text-magic-cyan mr-2 font-black"><?php echo str_pad($node_counter, 2, '0', STR_PAD_LEFT); ?></span>
+                            <?php echo $lec->titulo; ?>
+                        </div>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            <?php 
+                $prev_was_completed = $is_completed;
+                endforeach; 
+            endforeach; 
+            ?>
         </div>
-
-        <!-- Footer Goal -->
-        <div class="mt-40 text-center">
-            <div
-                class="w-24 h-24 bg-brand-900 text-white rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 shadow-2xl animate-bounce">
-                <i class="fas fa-trophy text-3xl"></i>
-            </div>
-            <h3 class="text-2xl font-black text-slate-900">¡Meta Final!</h3>
-            <p class="text-slate-500">Completa todas las lecciones para obtener tu certificación.</p>
-        </div>
-
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const svg = document.getElementById('path-svg');
+        const nodes = document.querySelectorAll('.island-node');
+        const container = document.querySelector('.campaign-path');
+        
+        function drawPath() {
+            if (nodes.length < 2) return;
+            
+            let pathD = '';
+            const containerRect = container.getBoundingClientRect();
+            
+            nodes.forEach((node, index) => {
+                const r1 = node.getBoundingClientRect();
+                const x1 = r1.left + r1.width/2 - containerRect.left;
+                const y1 = r1.top + r1.height/2 - containerRect.top;
+
+                if (index === 0) {
+                    pathD += `M ${x1} ${y1} `;
+                } else {
+                    const prevNode = nodes[index - 1];
+                    const pr = prevNode.getBoundingClientRect();
+                    const px = pr.left + pr.width/2 - containerRect.left;
+                    const py = pr.top + pr.height/2 - containerRect.top;
+                    
+                    const midY = (py + y1) / 2;
+                    pathD += `C ${px} ${midY}, ${x1} ${midY}, ${x1} ${y1} `;
+                }
+            });
+            
+            svg.innerHTML = `
+                <path d="${pathD}" class="energy-path" />
+                <path d="${pathD}" style="stroke: white; stroke-width: 1; opacity: 0.15; fill: none;" />
+            `;
+            
+            // Adjust SVG height to content
+            const lastNode = nodes[nodes.length - 1].getBoundingClientRect();
+            svg.style.height = (lastNode.bottom - containerRect.top + 100) + 'px';
+        }
+
+        // Draw initial and on resize
+        setTimeout(drawPath, 800);
+        window.addEventListener('resize', drawPath);
+        
+        // Add subtle parallax to background
+        window.addEventListener('scroll', () => {
+            const world = document.querySelector('.map-world');
+            world.style.backgroundPositionY = -(window.scrollY * 0.2) + 'px';
+        });
+    });
+</script>
 
 <?php include_once 'includes/footer.php'; ?>
