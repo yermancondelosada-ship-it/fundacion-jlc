@@ -25,7 +25,7 @@
             $default_links = [
                 ['url' => 'index.php', 'text' => 'INICIO'],
                 ['url' => 'nuestra-fundacion.php', 'text' => 'NUESTRA FUNDACIÓN'],
-                ['url' => 'servicios-corporativos.php', 'text' => 'SERVICIOS CORPORATIVOS'],
+                ['url' => 'servicios.php', 'text' => 'SERVICIOS'],
                 ['url' => 'pilares.php', 'text' => 'PILARES'],
                 ['url' => 'propuesta-de-valor.php', 'text' => 'PROPUESTA DE VALOR'],
                 ['url' => 'blog.php', 'text' => 'BLOG'],

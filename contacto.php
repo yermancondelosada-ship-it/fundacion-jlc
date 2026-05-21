@@ -90,7 +90,7 @@ $hero_style = $hero_img ? "background-image: linear-gradient(rgba(0,0,0,0.6), rg
                         <label class="block text-sm font-bold text-gray-700 mb-2 pl-2">Asunto</label>
                         <select name="asunto" class="w-full px-6 py-4 rounded-2xl border-none bg-white shadow-sm focus:ring-2 focus:ring-brand-500 transition-all appearance-none">
                             <option>Información de Cursos</option>
-                            <option>Servicios Corporativos</option>
+                            <option>Servicios</option>
                             <option>Propuesta de Alianza</option>
                             <option>Otro Asunto</option>
                         </select>

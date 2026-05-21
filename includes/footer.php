@@ -42,7 +42,7 @@
                 <ul class="space-y-4">
                     <li><a href="index.php" class="hover:text-white transition-colors">Inicio</a></li>
                     <li><a href="pilares.php" class="hover:text-white transition-colors">Nuestros Pilares</a></li>
-                    <li><a href="servicios-corporativos.php" class="hover:text-white transition-colors">Servicios</a>
+                    <li><a href="servicios.php" class="hover:text-white transition-colors">Servicios</a>
                     </li>
                     <li><a href="aula-virtual.php" class="hover:text-white transition-colors">Aula Virtual</a></li>
                 </ul>

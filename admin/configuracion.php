@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    // 4.5 Servicios Corporativos Management
+    // 4.5 Servicios Management
     if (isset($_POST['action_servicio'])) {
         $id = !empty($_POST['id']) ? $_POST['id'] : null;
         $titulo = $_POST['titulo'];
@@ -288,7 +288,7 @@ $navbar_links_json = $db->query("SELECT valor FROM site_config WHERE llave = 'na
 $navbar_links = $navbar_links_json ? json_decode($navbar_links_json, true) : [
     ['url' => 'index.php', 'text' => 'INICIO'],
     ['url' => 'nuestra-fundacion.php', 'text' => 'NUESTRA FUNDACIÓN'],
-    ['url' => 'servicios-corporativos.php', 'text' => 'SERVICIOS CORPORATIVOS'],
+    ['url' => 'servicios.php', 'text' => 'SERVICIOS'],
     ['url' => 'pilares.php', 'text' => 'PILARES'],
     ['url' => 'propuesta-de-valor.php', 'text' => 'PROPUESTA DE VALOR'],
     ['url' => 'blog.php', 'text' => 'BLOG'],
@@ -377,7 +377,7 @@ include_once __DIR__ . '/includes/admin_header.php';
 
 <div class="mb-12">
     <h3 class="text-3xl font-bold text-gray-900 mb-2">Editor Global JLC V3</h3>
-    <p class="text-gray-500">Control total del Hero dinámico, servicios corporativos y presencia digital.</p>
+    <p class="text-gray-500">Control total del Hero dinámico, servicios y presencia digital.</p>
 </div>
 
 <!-- Main Content Container -->
@@ -426,7 +426,7 @@ include_once __DIR__ . '/includes/admin_header.php';
                 <p class="text-gray-500 text-sm">Gestiona los puntos clave del servicio.</p>
             </div>
 
-            <!-- 5. Servicios Corporativos -->
+            <!-- 5. Servicios -->
             <div onclick="showModule('servicios')"
                 class="module-card bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-100 flex flex-col items-center text-center">
                 <div class="w-16 h-16 icon-box rounded-2xl flex items-center justify-center text-2xl mb-6">
@@ -1020,7 +1020,7 @@ include_once __DIR__ . '/includes/admin_header.php';
         <!-- Hero Image Upload -->
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10 mb-10 border-l-8 border-brand-500">
             <h4 class="text-2xl font-bold mb-2">Imagen de Cabecera (Hero)</h4>
-            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Servicios Corporativos". <br><span class="text-xs text-brand-700 font-bold"><i class="fas fa-info-circle"></i> Recomendación: Formato horizontal de alta calidad (ej. 1920x1080px) en JPG o PNG.</span></p>
+            <p class="text-gray-500 mb-6">Esta imagen aparecerá como fondo en el banner principal de la página "Servicios". <br><span class="text-xs text-brand-700 font-bold"><i class="fas fa-info-circle"></i> Recomendación: Formato horizontal de alta calidad (ej. 1920x1080px) en JPG o PNG.</span></p>
             <form action="configuracion.php" method="POST" enctype="multipart/form-data" class="flex flex-col md:flex-row gap-6 items-center">
                 <input type="hidden" name="update_general" value="1">
                 <?php $img_servicios = getConfig('hero_servicios'); ?>
@@ -1044,7 +1044,7 @@ include_once __DIR__ . '/includes/admin_header.php';
 
         <section class="bg-white rounded-[2.5rem] shadow-xl p-10">
             <div class="flex justify-between items-center mb-10">
-                <h4 class="text-2xl font-bold">Servicios Corporativos</h4>
+                <h4 class="text-2xl font-bold">Servicios</h4>
                 <button onclick="openModal('serviceModal')"
                     class="bg-green-600 text-white px-6 py-2 rounded-full font-bold text-xs shadow-lg">AGREGAR
                     NUEVO</button>

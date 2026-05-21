@@ -16,7 +16,7 @@ $hero_style = $hero_img ? "background-image: linear-gradient(rgba(0,0,0,0.6), rg
 <!-- Hero Section -->
 <section class="bg-brand-800 py-24 text-white relative overflow-hidden" style="<?php echo $hero_style; ?>">
     <div class="container mx-auto px-4 text-center relative z-10">
-        <h1 class="text-5xl font-bold mb-4"><?php echo getSiteConfig('servicios_hero_titulo', 'Servicios Corporativos'); ?></h1>
+        <h1 class="text-5xl font-bold mb-4"><?php echo getSiteConfig('servicios_hero_titulo', 'Servicios'); ?></h1>
         <p class="text-xl text-green-100 max-w-2xl mx-auto"><?php echo getSiteConfig('servicios_hero_subtitulo', 'Soluciones integrales para organizaciones que buscan innovar y generar impacto positivo.'); ?></p>
     </div>
 </section>

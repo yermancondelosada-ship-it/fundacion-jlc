@@ -120,7 +120,7 @@ function getSiteConfig($key, $default = '') {
                 <div class="hidden lg:flex items-center space-x-5">
                     <a href="index.php" class="text-xs font-bold uppercase tracking-wider hover:text-green-300 transition-colors">Inicio</a>
                     <a href="nuestra-fundacion.php" class="text-xs font-bold uppercase tracking-wider hover:text-green-300 transition-colors">Nuestra Fundación</a>
-                    <a href="servicios-corporativos.php" class="text-xs font-bold uppercase tracking-wider hover:text-green-300 transition-colors">Servicios</a>
+                    <a href="servicios.php" class="text-xs font-bold uppercase tracking-wider hover:text-green-300 transition-colors">Servicios</a>
                     <a href="pilares.php" class="text-xs font-bold uppercase tracking-wider hover:text-green-300 transition-colors">Pilares</a>
                     <a href="propuesta-de-valor.php" class="text-xs font-bold uppercase tracking-wider hover:text-green-300 transition-colors">Propuesta</a>
                     <a href="blog.php" class="text-xs font-bold uppercase tracking-wider hover:text-green-300 transition-colors">Blog</a>
